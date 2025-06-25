@@ -45,13 +45,20 @@ jobs:
             -d @payload.json)
 
           echo "$RESPONSE" > model_report.json
-          echo "📄 Model Response:"
-          cat model_report.json
 
-          if echo "$RESPONSE" | grep -q '"prediction": "fail"'; then
-            echo "❌ Workflow predicted to fail. Stopping."
+          echo "📄 Model Summary:"
+          SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
+          echo "$SUMMARY"
+
+          if echo "$SUMMARY" | grep -iq "fail"; then
+            echo "❌ Model predicts this workflow will likely fail."
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
+          else
+            echo "✅ Workflow is predicted safe."
+            echo "should_continue=true" >> "$GITHUB_OUTPUT"
           fi
+
       - name: Upload model response
         uses: actions/upload-artifact@v4
         with:
@@ -60,6 +67,6 @@ jobs:
 
       - name: Trigger Main Workflow (if safe)
         run: |
-          gh workflow run main-ci.yml
+          gh workflow run 'Main CI Workflow'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
