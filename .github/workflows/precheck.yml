@@ -1,0 +1,65 @@
+name: GitHub Model Precheck
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      models: read
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Call GitHub Model to Predict Outcome
+        id: check-result
+        run: |
+          echo "🔍 Preparing model input..."
+
+          WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
+          RAW_PROMPT="Analyze the following workflow YAML and predict if it will fail. Provide reasons and solutions. YAML: $WORKFLOW_CONTENT"
+
+          ESCAPED_PROMPT=$(echo "$RAW_PROMPT" | jq -Rs .)
+
+          echo "{
+            \"model\": \"openai/gpt-4o\",
+            \"messages\": [
+              {
+                \"role\": \"user\",
+                \"content\": $ESCAPED_PROMPT
+              }
+            ]
+          }" > payload.json
+
+          RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @payload.json)
+
+          echo "$RESPONSE" > model_report.json
+          echo "📄 Model Response:"
+          cat model_report.json
+
+          if echo "$RESPONSE" | grep -q '"prediction": "fail"'; then
+            echo "❌ Workflow predicted to fail. Stopping."
+            exit 1
+          fi
+      - name: Upload model response
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-response
+          path: model_report.json
+
+      - name: Trigger Main Workflow (if safe)
+        run: |
+          gh workflow run main-ci.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
