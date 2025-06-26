@@ -14,6 +14,7 @@ jobs:
 
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN}}
 
     steps:
       - name: Checkout repository
@@ -31,7 +32,7 @@ jobs:
           You are a GitHub Actions expert.
 
           Please carefully analyze the following GitHub Actions workflow YAML. which is used on workflow_call as triggered by other workflow, also this is just for setup of the node.js. Ignore commented lines. 
-
+          And at the end add a line where you will mention 'Model predicts this workflow will like fail or successfully run'
           - Identify any potential misconfigurations or risks that could lead to runtime failure.
           - If the workflow appears correct, explain why it should run successfully.
           - Provide actionable suggestions only if necessary.
@@ -87,4 +88,4 @@ jobs:
         run: |
           gh workflow run 'Main CI Workflow'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN}}
