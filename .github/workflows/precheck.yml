@@ -67,14 +67,15 @@ jobs:
           SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
           echo "$SUMMARY"
 
-          if echo "$SUMMARY" | grep -iq "fail"; then
+          if echo "$SUMMARY" | grep -iq "should run successfully"; then
+            echo "✅ Workflow is predicted safe."
+            echo "should_continue=true" >> "$GITHUB_OUTPUT"
+          else
             echo "❌ Model predicts this workflow will likely fail."
             echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
-          else
-            echo "✅ Workflow is predicted safe."
-            echo "should_continue=true" >> "$GITHUB_OUTPUT"
           fi
+
 
       - name: Upload model response
         uses: actions/upload-artifact@v4
