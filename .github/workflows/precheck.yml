@@ -27,8 +27,8 @@ jobs:
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ##RAW_PROMPT="Analyze the following workflow YAML and predict if it will fail. Provide reasons and solutions. YAML: $WORKFLOW_CONTENT"
 
-          
-          RAW_PROMPT= "You are a GitHub Actions expert.
+          RAW_PROMPTS=$(cat <<'EOF'
+          You are a GitHub Actions expert.
 
           Please carefully analyze the following GitHub Actions workflow YAML.
 
@@ -37,8 +37,12 @@ jobs:
           - Provide actionable suggestions only if necessary.
           - Keep your explanation concise, practical, and targeted to developers using GitHub CI/CD pipelines.
 
-          Here is the YAML content: $WORKFLOW_CONTENT
-          "
+          Here is the YAML content:
+          EOF
+          )
+
+          RAW_PROMPT="$RAW_PROMPTS"$'\n'"$WORKFLOW_CONTENT"
+
 
           ESCAPED_PROMPT=$(echo "$RAW_PROMPT" | jq -Rs .)
 
