@@ -25,7 +25,20 @@ jobs:
           echo "🔍 Preparing model input..."
 
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
-          RAW_PROMPT="Analyze the following workflow YAML and predict if it will fail. Provide reasons and solutions. YAML: $WORKFLOW_CONTENT"
+          ##RAW_PROMPT="Analyze the following workflow YAML and predict if it will fail. Provide reasons and solutions. YAML: $WORKFLOW_CONTENT"
+
+          
+          RAW_PROMPT= "You are a GitHub Actions expert.
+
+          Please carefully analyze the following GitHub Actions workflow YAML.
+
+          - Identify any potential misconfigurations or risks that could lead to runtime failure.
+          - If the workflow appears correct, explain why it should run successfully.
+          - Provide actionable suggestions only if necessary.
+          - Keep your explanation concise, practical, and targeted to developers using GitHub CI/CD pipelines.
+
+          Here is the YAML content: $WORKFLOW_CONTENT
+          "
 
           ESCAPED_PROMPT=$(echo "$RAW_PROMPT" | jq -Rs .)
 
