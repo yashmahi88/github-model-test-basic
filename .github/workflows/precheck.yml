@@ -30,7 +30,7 @@ jobs:
           RAW_PROMPTS=$(cat <<'EOF'
           You are a GitHub Actions expert.
 
-          Please carefully analyze the following GitHub Actions workflow YAML.
+          Please carefully analyze the following GitHub Actions workflow YAML. which is used on workflow_call as triggered by other workflow, also this is just for setup of the node.js. Ignore commented lines. 
 
           - Identify any potential misconfigurations or risks that could lead to runtime failure.
           - If the workflow appears correct, explain why it should run successfully.
