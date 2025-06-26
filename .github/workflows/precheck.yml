@@ -32,11 +32,11 @@ jobs:
           You are a GitHub Actions expert.
 
           Please carefully analyze the following GitHub Actions workflow YAML. which is used on workflow_call as triggered by other workflow, also this is just for setup of the node.js. Ignore commented lines. 
-          And at the end add a line where you will mention 'Model predicts this workflow will like fail or successfully run'
           - Identify any potential misconfigurations or risks that could lead to runtime failure.
           - If the workflow appears correct, explain why it should run successfully.
           - Provide actionable suggestions only if necessary.
           - Keep your explanation concise, practical, and targeted to developers using GitHub CI/CD pipelines.
+          - Please include a final line saying either PREDICTION: PASS or PREDICTION: FAIL.
 
           Here is the YAML content:
           EOF
@@ -68,7 +68,7 @@ jobs:
           SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
           echo "$SUMMARY"
 
-          if echo "$SUMMARY" | grep -iq "should run successfully"; then
+          if echo "$SUMMARY" | grep -q "PREDICTION: PASS"; then
             echo "✅ Workflow is predicted safe."
             echo "should_continue=true" >> "$GITHUB_OUTPUT"
           else
@@ -76,7 +76,6 @@ jobs:
             echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
           fi
-
 
       - name: Upload model response
         uses: actions/upload-artifact@v4
