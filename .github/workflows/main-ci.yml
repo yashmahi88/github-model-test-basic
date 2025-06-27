@@ -14,13 +14,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '98'
+          node-version: '18'
 
       - name: Generate dummy package.json
         run: npm init -y
 
-    #   - name: Install jq
-    #     run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Add dummy scripts
         run: |
