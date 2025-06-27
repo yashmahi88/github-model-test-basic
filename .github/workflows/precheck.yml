@@ -69,7 +69,12 @@ jobs:
           echo "$SUMMARY"
 
           # Normalize and match prediction status
-          REDICTION=$(echo "$SUMMARY" | grep -Ei 'PREDICTION[: ]+(PASS|FAIL)' | tail -n1 | awk -F':' '{print toupper($2)}' | xargs)
+          PREDICTION=$(echo "$SUMMARY" | \
+           grep -Eio 'PREDICTION[: ]+[*_]*PASS[*_]*|PREDICTION[: ]+[*_]*FAIL[*_]*' | \
+           tail -n1 | \
+           sed -E 's/.*PREDICTION[: ]+[*_]*([A-Z]+)[*_]*/\1/' | \
+           tr '[:lower:]' '[:upper:]')
+
 
           if [[ "$PREDICTION" == "PASS" ]]; then
             echo "✅ Workflow is predicted safe."
