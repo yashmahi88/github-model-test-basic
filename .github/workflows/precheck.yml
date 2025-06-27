@@ -68,7 +68,10 @@ jobs:
           SUMMARY=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
           echo "$SUMMARY"
 
-          if echo "$SUMMARY" | grep -Eiq "PREDICTION[: ]+PASS"; then
+          # Normalize and match prediction status
+          REDICTION=$(echo "$SUMMARY" | grep -Ei 'PREDICTION[: ]+(PASS|FAIL)' | tail -n1 | awk -F':' '{print toupper($2)}' | xargs)
+
+          if [[ "$PREDICTION" == "PASS" ]]; then
             echo "✅ Workflow is predicted safe."
             echo "should_continue=true" >> "$GITHUB_OUTPUT"
           else
