@@ -1,7 +1,7 @@
 name: GitHub Model Precheck
 
 on:
-  push:
+  #push:
   workflow_dispatch:
 
 jobs:

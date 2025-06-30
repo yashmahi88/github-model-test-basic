@@ -1,0 +1,363 @@
+name: GitHub Model Precheck - Unlimited Files
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      models: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Discover and Batch Knowledge Files
+        id: discover-files
+        run: |
+          echo "🔍 Discovering all knowledge base files..."
+          
+          # Create working directories
+          mkdir -p batches processed summaries temp
+          
+          # Find ALL knowledge base files (no limit)
+          find . -path "./knowledge-base/*" \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list
+          
+          TOTAL_FILES=$(wc -l < all_knowledge_files.list)
+          echo "📊 Found $TOTAL_FILES knowledge base files"
+          
+          if [[ $TOTAL_FILES -eq 0 ]]; then
+            echo "❌ No knowledge base files found in ./knowledge-base/ directory"
+            exit 1
+          fi
+          
+          # Calculate batch size based on file count and size limits
+          MAX_BATCH_SIZE=50  # Files per batch
+          MAX_CHARS_PER_BATCH=50000  # Characters per batch
+          
+          # Create batches
+          batch_num=0
+          current_batch_size=0
+          current_batch_chars=0
+          
+          while IFS= read -r file; do
+            if [[ -f "$file" ]]; then
+              file_size=$(wc -c < "$file" 2>/dev/null || echo 0)
+              
+              # Check if we need a new batch
+              if [[ $current_batch_size -ge $MAX_BATCH_SIZE ]] || \
+                 [[ $((current_batch_chars + file_size)) -gt $MAX_CHARS_PER_BATCH ]]; then
+                batch_num=$((batch_num + 1))
+                current_batch_size=0
+                current_batch_chars=0
+              fi
+              
+              # Add file to current batch
+              echo "$file" >> "batches/batch_${batch_num}.list"
+              current_batch_size=$((current_batch_size + 1))
+              current_batch_chars=$((current_batch_chars + file_size))
+            fi
+          done < all_knowledge_files.list
+          
+          TOTAL_BATCHES=$((batch_num + 1))
+          echo "📦 Created $TOTAL_BATCHES batches for processing"
+          echo "total_files=$TOTAL_FILES" >> "$GITHUB_OUTPUT"
+          echo "total_batches=$TOTAL_BATCHES" >> "$GITHUB_OUTPUT"
+      
+      - name: Process All Batches
+        id: process-batches
+        run: |
+          echo "⚙️ Processing all file batches..."
+          
+          TOTAL_BATCHES=$(ls batches/batch_*.list 2>/dev/null | wc -l)
+          
+          if [[ $TOTAL_BATCHES -eq 0 ]]; then
+            echo "❌ No batches found to process"
+            exit 1
+          fi
+          
+          # Process each batch
+          for batch_file in batches/batch_*.list; do
+            batch_name=$(basename "$batch_file" .list)
+            echo "🔄 Processing $batch_name..."
+            
+            # Combine all files in this batch
+            batch_content=""
+            files_in_batch=0
+            
+            while IFS= read -r file; do
+              if [[ -f "$file" ]]; then
+                echo "  📄 Adding: $file"
+                file_basename=$(basename "$file" | sed 's/[^a-zA-Z0-9]/_/g')
+                
+                # Add file header and content
+                batch_content+="=== FILE: $file ===\n"
+                
+                # Read file content safely
+                if file_content=$(cat "$file" 2>/dev/null); then
+                  batch_content+="$file_content\n\n"
+                  files_in_batch=$((files_in_batch + 1))
+                else
+                  echo "    ⚠️ Warning: Could not read $file"
+                fi
+              fi
+            done < "$batch_file"
+            
+            # Save batch content
+            echo -e "$batch_content" > "processed/${batch_name}_content.txt"
+            echo "✅ $batch_name: $files_in_batch files processed"
+          done
+          
+          echo "📊 All batches processed successfully"
+      
+      - name: Extract Rules from Each Batch
+        id: extract-rules
+        run: |
+          echo "🎯 Extracting rules from all batches using GitHub Models..."
+          
+          # Read target workflow for context
+          WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
+          
+          # Extract workflow keywords for targeted rule extraction
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
+          
+          all_extracted_rules=""
+          batch_count=0
+          
+          # Process each batch file
+          for batch_content_file in processed/batch_*_content.txt; do
+            if [[ -f "$batch_content_file" ]]; then
+              batch_name=$(basename "$batch_content_file" _content.txt)
+              echo "🤖 Extracting rules from $batch_name..."
+              
+              BATCH_CONTENT=$(cat "$batch_content_file")
+              BATCH_SIZE=$(echo "$BATCH_CONTENT" | wc -c)
+              
+              # Truncate if too large for API
+              MAX_BATCH_SIZE=40000
+              if [[ $BATCH_SIZE -gt $MAX_BATCH_SIZE ]]; then
+                echo "  ⚠️ Batch too large ($BATCH_SIZE chars), truncating to $MAX_BATCH_SIZE"
+                BATCH_CONTENT=$(echo "$BATCH_CONTENT" | head -c $MAX_BATCH_SIZE)
+              fi
+              
+              # Create extraction prompt
+              EXTRACTION_PROMPT=$(cat <<EOF
+          TASK: Extract workflow analysis rules from the knowledge base content below.
+          
+          TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
+          
+          INSTRUCTIONS:
+          1. Find rules/patterns that relate to GitHub Actions workflows
+          2. Focus on rules mentioning these keywords: $WORKFLOW_KEYWORDS
+          3. Extract rules about success/failure conditions
+          4. Format each rule as: "RULE: [description] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [filename]"
+          5. Maximum 30 rules per batch
+          6. Only extract rules, no explanations
+          
+          KNOWLEDGE BASE CONTENT:
+          $BATCH_CONTENT
+          EOF
+              )
+              
+              ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)
+              
+              # Make API call with retry logic
+              attempt=1
+              max_attempts=3
+              success=false
+              
+              while [[ $attempt -le $max_attempts ]] && [[ "$success" != "true" ]]; do
+                echo "    🔄 Attempt $attempt/$max_attempts for $batch_name"
+                
+                RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+                  -H "Authorization: Bearer $GITHUB_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"model\": \"openai/gpt-4o\",
+                    \"messages\": [{
+                      \"role\": \"system\",
+                      \"content\": \"You are a rule extractor. Extract only the rules from the provided content. Do not add external knowledge.\"
+                    }, {
+                      \"role\": \"user\",
+                      \"content\": $ESCAPED_PROMPT
+                    }],
+                    \"temperature\": 0.0,
+                    \"max_tokens\": 1200
+                  }")
+                
+                if echo "$RESPONSE" | jq -e '.choices[0].message.content' > /dev/null 2>&1; then
+                  EXTRACTED_RULES=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
+                  
+                  if [[ -n "$EXTRACTED_RULES" ]] && [[ "$EXTRACTED_RULES" != "null" ]]; then
+                    echo "$EXTRACTED_RULES" > "summaries/${batch_name}_rules.txt"
+                    all_extracted_rules+="$EXTRACTED_RULES\n"
+                    success=true
+                    echo "    ✅ Successfully extracted rules from $batch_name"
+                  fi
+                else
+                  echo "    ❌ API call failed for $batch_name (attempt $attempt)"
+                fi
+                
+                attempt=$((attempt + 1))
+                
+                # Rate limiting
+                sleep 2
+              done
+              
+              if [[ "$success" != "true" ]]; then
+                echo "    ⚠️ Failed to extract rules from $batch_name after $max_attempts attempts"
+              fi
+              
+              batch_count=$((batch_count + 1))
+            fi
+          done
+          
+          # Save all extracted rules
+          echo -e "$all_extracted_rules" > all_extracted_rules.txt
+          
+          TOTAL_RULES=$(echo -e "$all_extracted_rules" | grep -c "RULE:" || echo 0)
+          echo "📋 Extracted $TOTAL_RULES total rules from $batch_count batches"
+          echo "total_rules=$TOTAL_RULES" >> "$GITHUB_OUTPUT"
+      
+      - name: Consolidate and Analyze
+        id: final-analysis
+        run: |
+          echo "🎯 Final consolidation and analysis..."
+          
+          WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
+          ALL_RULES=$(cat all_extracted_rules.txt)
+          
+          # Count and validate rules
+          RULE_COUNT=$(echo "$ALL_RULES" | grep -c "RULE:" || echo 0)
+          
+          if [[ $RULE_COUNT -eq 0 ]]; then
+            echo "❌ No rules extracted from knowledge base"
+            echo "prediction=INSUFFICIENT_KNOWLEDGE" >> "$GITHUB_OUTPUT"
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          
+          echo "📊 Analyzing workflow against $RULE_COUNT extracted rules..."
+          
+          # Truncate rules if too many
+          MAX_RULES_SIZE=30000
+          RULES_SIZE=$(echo "$ALL_RULES" | wc -c)
+          
+          if [[ $RULES_SIZE -gt $MAX_RULES_SIZE ]]; then
+            echo "⚠️ Rules too large ($RULES_SIZE chars), truncating to $MAX_RULES_SIZE"
+            ALL_RULES=$(echo "$ALL_RULES" | head -c $MAX_RULES_SIZE)
+          fi
+          
+          # Final analysis prompt
+          ANALYSIS_PROMPT=$(cat <<EOF
+          CRITICAL: You are constrained to ONLY the extracted rules below. Do not use external knowledge.
+          
+          EXTRACTED RULES (your only knowledge source):
+          $ALL_RULES
+          
+          WORKFLOW TO ANALYZE:
+          $WORKFLOW_CONTENT
+          
+          INSTRUCTIONS:
+          1. Check workflow against each relevant extracted rule
+          2. Count PASS rules that are satisfied
+          3. Count FAIL rules that are violated
+          4. List specific violations and satisfactions
+          5. Base prediction ONLY on rule analysis
+          
+          OUTPUT FORMAT:
+          APPLICABLE_RULES: [number]
+          SATISFIED_RULES: [number and list]
+          VIOLATED_RULES: [number and list]
+          PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
+          EOF
+          )
+          
+          ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
+          
+          # Final analysis API call
+          RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"model\": \"openai/gpt-4o\",
+              \"messages\": [{
+                \"role\": \"system\",
+                \"content\": \"You are a rule-based workflow analyzer. You can ONLY use the provided extracted rules. You have no other knowledge.\"
+              }, {
+                \"role\": \"user\",
+                \"content\": $ESCAPED_PROMPT
+              }],
+              \"temperature\": 0.0,
+              \"max_tokens\": 1500
+            }")
+          
+          echo "$RESPONSE" > final_analysis_response.json
+          
+          ANALYSIS_RESULT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No response"')
+          echo "📄 Final Analysis Result:"
+          echo "$ANALYSIS_RESULT"
+          
+          # Extract prediction with multiple fallback patterns
+          PREDICTION=$(echo "$ANALYSIS_RESULT" | grep -oiE 'PREDICTION[: ]+[A-Z_]+' | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+).*/\1/' | tr '[:lower:]' '[:upper:]')
+          
+          # Fallback prediction extraction
+          if [[ -z "$PREDICTION" ]]; then
+            if echo "$ANALYSIS_RESULT" | grep -qi "insufficient"; then
+              PREDICTION="INSUFFICIENT_KNOWLEDGE"
+            elif echo "$ANALYSIS_RESULT" | grep -qi "fail"; then
+              PREDICTION="FAIL"
+            elif echo "$ANALYSIS_RESULT" | grep -qi "pass"; then
+              PREDICTION="PASS"
+            else
+              PREDICTION="INSUFFICIENT_KNOWLEDGE"
+            fi
+          fi
+          
+          echo "🎯 Final Prediction: $PREDICTION"
+          echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
+          
+          # Save analysis details
+          echo "$ANALYSIS_RESULT" > final_analysis.txt
+          
+          case "$PREDICTION" in
+            "PASS")
+              echo "✅ Workflow analysis PASSED based on extracted rules"
+              echo "should_continue=true" >> "$GITHUB_OUTPUT"
+              ;;
+            "FAIL")
+              echo "❌ Workflow analysis FAILED based on extracted rules"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+            *)
+              echo "⚠️ Insufficient knowledge or unclear prediction"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+          esac
+      
+      - name: Upload Comprehensive Analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprehensive-analysis
+          path: |
+            final_analysis_response.json
+            final_analysis.txt
+            all_extracted_rules.txt
+            summaries/
+            processed/
+            batches/
+            all_knowledge_files.list
+      
+      - name: Trigger Main Workflow
+        if: steps.final-analysis.outputs.should_continue == 'true'
+        run: |
+          echo "🚀 Triggering main workflow after successful analysis"
+          gh workflow run 'Main CI Workflow'
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN}}
