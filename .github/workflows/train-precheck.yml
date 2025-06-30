@@ -180,7 +180,7 @@ jobs:
                     \"model\": \"openai/gpt-4o\",
                     \"messages\": [{
                       \"role\": \"system\",
-                      \"content\": \"You are a rule extractor. Extract only the rules from the provided content. Do not add external knowledge.\"
+                      \"content\": \"Only extract rules that are **explicitly defined** in the knowledge base. Do not infer rules based on examples, comments, or usage patterns. Skip all lines unless they clearly state a rule.\"
                     }, {
                       \"role\": \"user\",
                       \"content\": $ESCAPED_PROMPT
