@@ -17,3 +17,4 @@ The purpose of this workflow is to validate that a basic Node.js project setup c
 
 RULE: package.json must exist before using jq to modify it | TYPE: FAIL | SOURCE: setup.txt
 RULE: Always run `npm init -y` before manipulating package.json | TYPE: FAIL | SOURCE: node_guidelines.txt
+ 
