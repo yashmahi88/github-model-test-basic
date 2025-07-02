@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Extracting rules from knowledge files and logs..."
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
-          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\\b[a-zA-Z][a-zA-Z0-9_-]*\\b' | sort -u | head -50 | tr '\n' ' ')
 
           all_extracted_rules=""
 
@@ -85,7 +85,7 @@ jobs:
             BATCH_NAME=$(basename "$batch_file" _content.txt)
             echo "Processing $BATCH_NAME..."
 
-            EXTRACTION_PROMPT=$(cat > temp/extraction_prompt.txt <<EOF
+            cat <<EOF > temp/extraction_prompt.txt
             TASK: Extract workflow rules from the content.
             TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
             INSTRUCTIONS:
@@ -95,11 +95,10 @@ jobs:
             CONTENT:
             $BATCH_CONTENT
             EOF
-            )
 
             ESCAPED_PROMPT=$(jq -Rs . < temp/extraction_prompt.txt)
 
-            cat > payload.json <<EOF
+            cat <<EOF > payload.json
             {
               "model": "openai/gpt-4o",
               "messages": [
@@ -132,7 +131,7 @@ jobs:
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ALL_RULES=$(cat all_extracted_rules.txt)
 
-          cat > temp/final_prompt.txt <<EOF
+          cat <<EOF > temp/final_prompt.txt
           EXTRACTED RULES:
           $ALL_RULES
           
@@ -150,7 +149,7 @@ jobs:
 
           ESCAPED_PROMPT=$(jq -Rs . < temp/final_prompt.txt)
 
-          cat > final_payload.json <<EOF
+          cat <<EOF > final_payload.json
           {
             "model": "openai/gpt-4o",
             "messages": [
