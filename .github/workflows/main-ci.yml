@@ -16,8 +16,8 @@ jobs:
         with:
           node-version: '18'
     ###
-      # - name: Generate dummy package.json
-      #   run: npm init -y
+      - name: Generate dummy package.json
+        run: npm init -y
 
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
