@@ -28,15 +28,22 @@ jobs:
           gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
           done
 
-      - name: Commit Updated Dynamic Knowledge
+      - name: Commit and Push Dynamic Knowledge
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+    
+          # Set remote with PAT
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
+    
           git add dynamic-knowledge/*
+    
           if git diff --staged --quiet; then
-            echo "No changes to commit."
+            echo "✅ No changes to commit."
           else
             git commit -m "Update dynamic knowledge from recent runs"
             git push origin HEAD
           fi
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        
