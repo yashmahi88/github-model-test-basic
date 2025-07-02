@@ -1,7 +1,7 @@
 name: GitHub Model Precheck
 
 on:
-  #push:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
           - Provide actionable suggestions only if necessary.
           - Keep your explanation concise, practical, and targeted to developers using GitHub CI/CD pipelines.
           - Please include a final line saying either PREDICTION: PASS or PREDICTION: FAIL.
-
+ 
           Here is the YAML content:
           EOF
           )
@@ -84,7 +84,7 @@ jobs:
             echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
           fi
-
+  
       - name: Upload model response
         uses: actions/upload-artifact@v4
         with:

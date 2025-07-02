@@ -1,7 +1,7 @@
 name: Update Dynamic Knowledge Base
 
 on:
-  push:
+#   push:
 #   schedule:
 #     - cron: '0 * * * *' # every hour
   workflow_dispatch:
