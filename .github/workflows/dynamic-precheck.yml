@@ -1,0 +1,208 @@
+name: GitHub Model Precheck - Unlimited Files
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+      models: read
+
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Static Knowledge Base
+        run: |
+          mkdir -p batches processed summaries temp
+          find ./knowledge-base \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list
+
+          TOTAL_FILES=$(wc -l < all_knowledge_files.list)
+          echo "Found $TOTAL_FILES knowledge base files"
+
+          MAX_BATCH_SIZE=50
+          MAX_CHARS_PER_BATCH=50000
+
+          batch_num=0
+          current_batch_size=0
+          current_batch_chars=0
+
+          while IFS= read -r file; do
+            if [[ -f "$file" ]]; then
+              file_size=$(wc -c < "$file" 2>/dev/null || echo 0)
+
+              if [[ $current_batch_size -ge $MAX_BATCH_SIZE ]] || [[ $((current_batch_chars + file_size)) -gt $MAX_CHARS_PER_BATCH ]]; then
+                batch_num=$((batch_num + 1))
+                current_batch_size=0
+                current_batch_chars=0
+              fi
+
+              echo "$file" >> "batches/batch_${batch_num}.list"
+              current_batch_size=$((current_batch_size + 1))
+              current_batch_chars=$((current_batch_chars + file_size))
+            fi
+          done < all_knowledge_files.list
+
+          echo "Created $((batch_num + 1)) batches"
+
+      - name: Fetch Dynamic Knowledge from Workflow Logs
+        run: |
+          mkdir -p dynamic-knowledge/logs
+
+          gh run list --workflow="main-ci.yml" --limit 10 \
+            --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
+
+          jq -r '.[] | select(.status == "completed") | .databaseId' dynamic-knowledge/run_history.json | while read -r RUN_ID; do
+            echo "Fetching logs for run $RUN_ID..."
+            gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
+          done
+
+          cat dynamic-knowledge/logs/log_*.txt > dynamic-knowledge/dynamic_combined_logs.txt
+
+      - name: Prepare Combined Knowledge
+        run: |
+          echo "=== FILE: dynamic_combined_logs.txt ===" > processed/batch_dynamic_logs_content.txt
+          cat dynamic-knowledge/dynamic_combined_logs.txt >> processed/batch_dynamic_logs_content.txt
+
+      - name: Extract Rules from All Batches (Static + Dynamic)
+        run: |
+          echo "Extracting rules from knowledge files and logs..."
+          WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
+
+          all_extracted_rules=""
+
+          for batch_file in processed/batch_*_content.txt; do
+            BATCH_CONTENT=$(cat "$batch_file")
+            BATCH_NAME=$(basename "$batch_file" _content.txt)
+            echo "Processing $BATCH_NAME..."
+
+            read -r -d '' EXTRACTION_PROMPT <<EOF || true
+              TASK: Extract workflow rules from the content.
+              TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
+              INSTRUCTIONS:
+              1. Extract rules related to GitHub Actions workflows.
+              2. Include conditions for success/failure/warnings.
+              3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
+              CONTENT:
+              $BATCH_CONTENT
+            EOF
+
+            ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)
+
+            RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+              -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"model\": \"openai/gpt-4o\",
+                \"messages\": [
+                  { \"role\": \"system\", \"content\": \"Only extract clearly stated rules.\" },
+                  { \"role\": \"user\", \"content\": $ESCAPED_PROMPT }
+                ],
+                \"temperature\": 0.0,
+                \"max_tokens\": 1200
+              }")
+
+            RULES=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
+            echo "$RULES" > summaries/${BATCH_NAME}_rules.txt
+            all_extracted_rules+="$RULES\n"
+          done
+
+          echo -e "$all_extracted_rules" > all_extracted_rules.txt
+
+      - name: Final Rule-Based Workflow Analysis
+        id: final-analysis
+        continue-on-error: true
+        run: |
+          echo "Running final rule-based analysis..."
+
+          WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
+          ALL_RULES=$(cat all_extracted_rules.txt)
+
+          read -r -d '' ANALYSIS_PROMPT <<EOF || true
+            EXTRACTED RULES:
+            $ALL_RULES
+
+            WORKFLOW TO ANALYZE:
+            $WORKFLOW_CONTENT
+
+            INSTRUCTIONS:
+            - Evaluate workflow based only on rules.
+            - Output:
+              APPLICABLE_RULES
+              SATISFIED_RULES
+              VIOLATED_RULES
+              PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
+            EOF
+
+          ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
+
+          RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"model\": \"openai/gpt-4o\",
+              \"messages\": [
+                { \"role\": \"system\", \"content\": \"Analyze the workflow strictly based on provided rules.\" },
+                { \"role\": \"user\", \"content\": $ESCAPED_PROMPT }
+              ],
+              \"temperature\": 0.0,
+              \"max_tokens\": 1500
+            }")
+
+          echo "$RESPONSE" > final_analysis_response.json
+
+          ANALYSIS_RESULT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No response"')
+          echo "$ANALYSIS_RESULT" > final_analysis.txt
+
+          PREDICTION=$(echo "$ANALYSIS_RESULT" | grep -oiE 'PREDICTION[: ]+[A-Z_]+' | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+).*/\1/' | tr '[:lower:]' '[:upper:]')
+
+          echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
+          echo "should_continue=$([[ $PREDICTION == \"PASS\" ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload All Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-analysis-bundle
+          path: |
+            final_analysis.txt
+            final_analysis_response.json
+            all_extracted_rules.txt
+            summaries/
+            processed/
+            batches/
+            dynamic-knowledge/
+            all_knowledge_files.list
+
+      - name: Push Dynamic Knowledge Back to Repo
+        if: always()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
+
+          git add dynamic-knowledge/*
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update dynamic knowledge from recent runs"
+            git push origin HEAD
+          fi
+
+      - name: Trigger Main Workflow
+        if: steps.final-analysis.outputs.should_continue == 'true'
+        run: |
+          echo "Triggering Main CI Workflow"
+          gh workflow run 'Main CI Workflow'
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
