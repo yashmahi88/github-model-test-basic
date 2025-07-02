@@ -129,21 +129,21 @@ jobs:
           ALL_RULES=$(cat all_extracted_rules.txt)
 
           ANALYSIS_PROMPT=$(cat <<EOF
-EXTRACTED RULES:
-$ALL_RULES
-
-WORKFLOW TO ANALYZE:
-$WORKFLOW_CONTENT
-
-INSTRUCTIONS:
-- Evaluate workflow based only on rules.
-- Output:
-  APPLICABLE_RULES
-  SATISFIED_RULES
-  VIOLATED_RULES
-  PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
-EOF
-)
+          EXTRACTED RULES:
+          $ALL_RULES
+          
+          WORKFLOW TO ANALYZE:
+          $WORKFLOW_CONTENT
+          
+          INSTRUCTIONS:
+          - Evaluate workflow based only on rules.
+          - Output:
+            APPLICABLE_RULES
+            SATISFIED_RULES
+            VIOLATED_RULES
+            PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
+          EOF
+          )
 
           ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
 
