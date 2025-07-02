@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Extracting rules from knowledge files and logs..."
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
-          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\\b[a-zA-Z][a-zA-Z0-9_-]*\\b' | sort -u | head -50 | tr '\n' ' ')
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
 
           all_extracted_rules=""
 
@@ -85,30 +85,38 @@ jobs:
             BATCH_NAME=$(basename "$batch_file" _content.txt)
             echo "Processing $BATCH_NAME..."
 
-            cat <<EOF > temp/extraction_prompt.txt
-            TASK: Extract workflow rules from the content.
-            TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
-            INSTRUCTIONS:
-            1. Extract rules related to GitHub Actions workflows.
-            2. Include conditions for success/failure/warnings.
-            3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
-            CONTENT:
-            $BATCH_CONTENT
-            EOF
+            cat > temp/extraction_prompt.txt << 'PROMPT_EOF'
+          TASK: Extract workflow rules from the content.
+          TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
+          INSTRUCTIONS:
+          1. Extract rules related to GitHub Actions workflows.
+          2. Include conditions for success/failure/warnings.
+          3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
+          CONTENT:
+          $BATCH_CONTENT
+          PROMPT_EOF
+
+            # Replace variables in the prompt file
+            sed -i "s/\$WORKFLOW_KEYWORDS/$WORKFLOW_KEYWORDS/g" temp/extraction_prompt.txt
+            sed -i "s/\$BATCH_NAME/$BATCH_NAME/g" temp/extraction_prompt.txt
+            sed -i "s/\$BATCH_CONTENT/$BATCH_CONTENT/g" temp/extraction_prompt.txt
 
             ESCAPED_PROMPT=$(jq -Rs . < temp/extraction_prompt.txt)
 
-            cat <<EOF > payload.json
-            {
-              "model": "openai/gpt-4o",
-              "messages": [
-                { "role": "system", "content": "Only extract clearly stated rules." },
-                { "role": "user", "content": $ESCAPED_PROMPT }
-              ],
-              "temperature": 0.0,
-              "max_tokens": 1200
-            }
-            EOF
+            cat > payload.json << 'JSON_EOF'
+          {
+            "model": "openai/gpt-4o",
+            "messages": [
+              { "role": "system", "content": "Only extract clearly stated rules." },
+              { "role": "user", "content": ESCAPED_PROMPT_PLACEHOLDER }
+            ],
+            "temperature": 0.0,
+            "max_tokens": 1200
+          }
+          JSON_EOF
+
+            # Replace the placeholder with the actual escaped prompt
+            sed -i "s/ESCAPED_PROMPT_PLACEHOLDER/$ESCAPED_PROMPT/g" payload.json
 
             RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -131,7 +139,7 @@ jobs:
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ALL_RULES=$(cat all_extracted_rules.txt)
 
-          cat <<EOF > temp/final_prompt.txt
+          cat > temp/final_prompt.txt << 'FINAL_PROMPT_EOF'
           EXTRACTED RULES:
           $ALL_RULES
           
@@ -145,21 +153,28 @@ jobs:
             SATISFIED_RULES
             VIOLATED_RULES
             PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
-          EOF
+          FINAL_PROMPT_EOF
+
+          # Replace variables in the final prompt
+          sed -i "s/\$ALL_RULES/$ALL_RULES/g" temp/final_prompt.txt
+          sed -i "s/\$WORKFLOW_CONTENT/$WORKFLOW_CONTENT/g" temp/final_prompt.txt
 
           ESCAPED_PROMPT=$(jq -Rs . < temp/final_prompt.txt)
 
-          cat <<EOF > final_payload.json
+          cat > final_payload.json << 'FINAL_JSON_EOF'
           {
             "model": "openai/gpt-4o",
             "messages": [
               { "role": "system", "content": "Analyze the workflow strictly based on provided rules." },
-              { "role": "user", "content": $ESCAPED_PROMPT }
+              { "role": "user", "content": ESCAPED_PROMPT_PLACEHOLDER }
             ],
             "temperature": 0.0,
             "max_tokens": 1500
           }
-          EOF
+          FINAL_JSON_EOF
+
+          # Replace the placeholder with the actual escaped prompt
+          sed -i "s/ESCAPED_PROMPT_PLACEHOLDER/$ESCAPED_PROMPT/g" final_payload.json
 
           RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
