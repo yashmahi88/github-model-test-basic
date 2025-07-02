@@ -1,0 +1,246 @@
+build	Set up job	﻿2025-07-02T11:39:37.7046416Z Current runner version: '2.325.0'
+build	Set up job	2025-07-02T11:39:37.7082047Z ##[group]Runner Image Provisioner
+build	Set up job	2025-07-02T11:39:37.7083392Z Hosted Compute Agent
+build	Set up job	2025-07-02T11:39:37.7084238Z Version: 20250701.355
+build	Set up job	2025-07-02T11:39:37.7085380Z Commit: 27f92e4f1798a901b7712d341e6f04a2ff90d227
+build	Set up job	2025-07-02T11:39:37.7086487Z Build Date: 2025-07-01T18:23:27Z
+build	Set up job	2025-07-02T11:39:37.7087500Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:37.7088782Z ##[group]Operating System
+build	Set up job	2025-07-02T11:39:37.7089726Z Ubuntu
+build	Set up job	2025-07-02T11:39:37.7090515Z 24.04.2
+build	Set up job	2025-07-02T11:39:37.7091409Z LTS
+build	Set up job	2025-07-02T11:39:37.7092241Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:37.7093001Z ##[group]Runner Image
+build	Set up job	2025-07-02T11:39:37.7093923Z Image: ubuntu-24.04
+build	Set up job	2025-07-02T11:39:37.7094748Z Version: 20250622.1.0
+build	Set up job	2025-07-02T11:39:37.7096643Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250622.1/images/ubuntu/Ubuntu2404-Readme.md
+build	Set up job	2025-07-02T11:39:37.7099336Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250622.1
+build	Set up job	2025-07-02T11:39:37.7101475Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:37.7106271Z ##[group]GITHUB_TOKEN Permissions
+build	Set up job	2025-07-02T11:39:37.7109584Z Actions: write
+build	Set up job	2025-07-02T11:39:37.7110462Z Attestations: write
+build	Set up job	2025-07-02T11:39:37.7111350Z Checks: write
+build	Set up job	2025-07-02T11:39:37.7112331Z Contents: write
+build	Set up job	2025-07-02T11:39:37.7113261Z Deployments: write
+build	Set up job	2025-07-02T11:39:37.7114263Z Discussions: write
+build	Set up job	2025-07-02T11:39:37.7115223Z Issues: write
+build	Set up job	2025-07-02T11:39:37.7116074Z Metadata: read
+build	Set up job	2025-07-02T11:39:37.7116860Z Models: read
+build	Set up job	2025-07-02T11:39:37.7117844Z Packages: write
+build	Set up job	2025-07-02T11:39:37.7118903Z Pages: write
+build	Set up job	2025-07-02T11:39:37.7119874Z PullRequests: write
+build	Set up job	2025-07-02T11:39:37.7120878Z RepositoryProjects: write
+build	Set up job	2025-07-02T11:39:37.7121841Z SecurityEvents: write
+build	Set up job	2025-07-02T11:39:37.7122924Z Statuses: write
+build	Set up job	2025-07-02T11:39:37.7123734Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:37.7126677Z Secret source: Actions
+build	Set up job	2025-07-02T11:39:37.7127817Z Prepare workflow directory
+build	Set up job	2025-07-02T11:39:37.7609160Z Prepare all required actions
+build	Set up job	2025-07-02T11:39:37.7666921Z Getting action download info
+build	Set up job	2025-07-02T11:39:37.9940731Z ##[group]Download immutable action package 'actions/checkout@v4'
+build	Set up job	2025-07-02T11:39:37.9941871Z Version: 4.2.2
+build	Set up job	2025-07-02T11:39:37.9942860Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+build	Set up job	2025-07-02T11:39:37.9944117Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+build	Set up job	2025-07-02T11:39:37.9944862Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:38.0784571Z ##[group]Download immutable action package 'actions/setup-node@v4'
+build	Set up job	2025-07-02T11:39:38.0785581Z Version: 4.4.0
+build	Set up job	2025-07-02T11:39:38.0786397Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+build	Set up job	2025-07-02T11:39:38.0787528Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+build	Set up job	2025-07-02T11:39:38.0788552Z ##[endgroup]
+build	Set up job	2025-07-02T11:39:38.3180219Z Complete job name: build
+build	Checkout code	﻿2025-07-02T11:39:38.3892814Z ##[group]Run actions/checkout@v4
+build	Checkout code	2025-07-02T11:39:38.3893683Z with:
+build	Checkout code	2025-07-02T11:39:38.3894156Z   repository: yashmahi88/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.3894962Z   token: ***
+build	Checkout code	2025-07-02T11:39:38.3895362Z   ssh-strict: true
+build	Checkout code	2025-07-02T11:39:38.3895781Z   ssh-user: git
+build	Checkout code	2025-07-02T11:39:38.3896214Z   persist-credentials: true
+build	Checkout code	2025-07-02T11:39:38.3896692Z   clean: true
+build	Checkout code	2025-07-02T11:39:38.3897125Z   sparse-checkout-cone-mode: true
+build	Checkout code	2025-07-02T11:39:38.3897643Z   fetch-depth: 1
+build	Checkout code	2025-07-02T11:39:38.3898062Z   fetch-tags: false
+build	Checkout code	2025-07-02T11:39:38.3898654Z   show-progress: true
+build	Checkout code	2025-07-02T11:39:38.3899094Z   lfs: false
+build	Checkout code	2025-07-02T11:39:38.3899484Z   submodules: false
+build	Checkout code	2025-07-02T11:39:38.3899921Z   set-safe-directory: true
+build	Checkout code	2025-07-02T11:39:38.3900626Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.5007339Z Syncing repository: yashmahi88/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.5010605Z ##[group]Getting Git version info
+build	Checkout code	2025-07-02T11:39:38.5011746Z Working directory is '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	Checkout code	2025-07-02T11:39:38.5013039Z [command]/usr/bin/git version
+build	Checkout code	2025-07-02T11:39:38.5026099Z git version 2.49.0
+build	Checkout code	2025-07-02T11:39:38.5053562Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.5067390Z Temporarily overriding HOME='/home/runner/work/_temp/27857e52-03f1-4e56-a64d-5ce8cec47081' before making global git config changes
+build	Checkout code	2025-07-02T11:39:38.5069618Z Adding repository directory to the temporary git global config as a safe directory
+build	Checkout code	2025-07-02T11:39:38.5073329Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.5112000Z Deleting the contents of '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	Checkout code	2025-07-02T11:39:38.5115352Z ##[group]Initializing the repository
+build	Checkout code	2025-07-02T11:39:38.5119983Z [command]/usr/bin/git init /home/runner/work/github-model-test-basic/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.5184908Z hint: Using 'master' as the name for the initial branch. This default branch name
+build	Checkout code	2025-07-02T11:39:38.5186617Z hint: is subject to change. To configure the initial branch name to use in all
+build	Checkout code	2025-07-02T11:39:38.5188607Z hint: of your new repositories, which will suppress this warning, call:
+build	Checkout code	2025-07-02T11:39:38.5189914Z hint:
+build	Checkout code	2025-07-02T11:39:38.5190985Z hint: 	git config --global init.defaultBranch <name>
+build	Checkout code	2025-07-02T11:39:38.5192415Z hint:
+build	Checkout code	2025-07-02T11:39:38.5193739Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+build	Checkout code	2025-07-02T11:39:38.5195869Z hint: 'development'. The just-created branch can be renamed via this command:
+build	Checkout code	2025-07-02T11:39:38.5197817Z hint:
+build	Checkout code	2025-07-02T11:39:38.5199010Z hint: 	git branch -m <name>
+build	Checkout code	2025-07-02T11:39:38.5200881Z Initialized empty Git repository in /home/runner/work/github-model-test-basic/github-model-test-basic/.git/
+build	Checkout code	2025-07-02T11:39:38.5204306Z [command]/usr/bin/git remote add origin https://github.com/yashmahi88/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.5235797Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.5236980Z ##[group]Disabling automatic garbage collection
+build	Checkout code	2025-07-02T11:39:38.5240927Z [command]/usr/bin/git config --local gc.auto 0
+build	Checkout code	2025-07-02T11:39:38.5270440Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.5271638Z ##[group]Setting up auth
+build	Checkout code	2025-07-02T11:39:38.5278047Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	Checkout code	2025-07-02T11:39:38.5309539Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	Checkout code	2025-07-02T11:39:38.5563128Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	Checkout code	2025-07-02T11:39:38.5601892Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	Checkout code	2025-07-02T11:39:38.5836620Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+build	Checkout code	2025-07-02T11:39:38.5873120Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.5874057Z ##[group]Fetching the repository
+build	Checkout code	2025-07-02T11:39:38.5882770Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8e686950f134498d294b9c521321c1f4350e9310:refs/remotes/origin/master
+build	Checkout code	2025-07-02T11:39:38.9480124Z From https://github.com/yashmahi88/github-model-test-basic
+build	Checkout code	2025-07-02T11:39:38.9481910Z  * [new ref]         8e686950f134498d294b9c521321c1f4350e9310 -> origin/master
+build	Checkout code	2025-07-02T11:39:38.9509796Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.9510926Z ##[group]Determining the checkout info
+build	Checkout code	2025-07-02T11:39:38.9512306Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.9517115Z [command]/usr/bin/git sparse-checkout disable
+build	Checkout code	2025-07-02T11:39:38.9557437Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+build	Checkout code	2025-07-02T11:39:38.9585565Z ##[group]Checking out the ref
+build	Checkout code	2025-07-02T11:39:38.9589035Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+build	Checkout code	2025-07-02T11:39:38.9692186Z Reset branch 'master'
+build	Checkout code	2025-07-02T11:39:38.9695313Z branch 'master' set up to track 'origin/master'.
+build	Checkout code	2025-07-02T11:39:38.9701306Z ##[endgroup]
+build	Checkout code	2025-07-02T11:39:38.9736768Z [command]/usr/bin/git log -1 --format=%H
+build	Checkout code	2025-07-02T11:39:38.9760404Z 8e686950f134498d294b9c521321c1f4350e9310
+build	Setup Node.js	﻿2025-07-02T11:39:39.0007793Z ##[group]Run actions/setup-node@v4
+build	Setup Node.js	2025-07-02T11:39:39.0008623Z with:
+build	Setup Node.js	2025-07-02T11:39:39.0008991Z   node-version: 18
+build	Setup Node.js	2025-07-02T11:39:39.0009379Z   always-auth: false
+build	Setup Node.js	2025-07-02T11:39:39.0009787Z   check-latest: false
+build	Setup Node.js	2025-07-02T11:39:39.0010340Z   token: ***
+build	Setup Node.js	2025-07-02T11:39:39.0010698Z ##[endgroup]
+build	Setup Node.js	2025-07-02T11:39:39.1815822Z Found in cache @ /opt/hostedtoolcache/node/18.20.8/x64
+build	Setup Node.js	2025-07-02T11:39:39.1823177Z ##[group]Environment details
+build	Setup Node.js	2025-07-02T11:39:41.0160065Z node: v18.20.8
+build	Setup Node.js	2025-07-02T11:39:41.0160688Z npm: 10.8.2
+build	Setup Node.js	2025-07-02T11:39:41.0160981Z yarn: 1.22.22
+build	Setup Node.js	2025-07-02T11:39:41.0161938Z ##[endgroup]
+build	Generate dummy package.json	﻿2025-07-02T11:39:41.0275407Z ##[group]Run npm init -y
+build	Generate dummy package.json	2025-07-02T11:39:41.0275867Z [36;1mnpm init -y[0m
+build	Generate dummy package.json	2025-07-02T11:39:41.0368697Z shell: /usr/bin/bash -e {0}
+build	Generate dummy package.json	2025-07-02T11:39:41.0369127Z ##[endgroup]
+build	Generate dummy package.json	2025-07-02T11:39:42.9932076Z Wrote to /home/runner/work/github-model-test-basic/github-model-test-basic/package.json:
+build	Generate dummy package.json	2025-07-02T11:39:42.9933016Z 
+build	Generate dummy package.json	2025-07-02T11:39:42.9933242Z {
+build	Generate dummy package.json	2025-07-02T11:39:42.9933720Z   "name": "github-model-test-basic",
+build	Generate dummy package.json	2025-07-02T11:39:42.9934217Z   "version": "1.0.0",
+build	Generate dummy package.json	2025-07-02T11:39:42.9934597Z   "main": "index.js",
+build	Generate dummy package.json	2025-07-02T11:39:42.9934970Z   "scripts": {
+build	Generate dummy package.json	2025-07-02T11:39:42.9935501Z     "test": "echo \"Error: no test specified\" && exit 1"
+build	Generate dummy package.json	2025-07-02T11:39:42.9936118Z   },
+build	Generate dummy package.json	2025-07-02T11:39:42.9936459Z   "keywords": [],
+build	Generate dummy package.json	2025-07-02T11:39:42.9936838Z   "author": "",
+build	Generate dummy package.json	2025-07-02T11:39:42.9937209Z   "license": "ISC",
+build	Generate dummy package.json	2025-07-02T11:39:42.9937597Z   "description": ""
+build	Generate dummy package.json	2025-07-02T11:39:42.9937972Z }
+build	Generate dummy package.json	2025-07-02T11:39:42.9938149Z 
+build	Generate dummy package.json	2025-07-02T11:39:42.9938181Z 
+build	Generate dummy package.json	2025-07-02T11:39:42.9945183Z 
+build	Install jq	﻿2025-07-02T11:39:43.0065765Z ##[group]Run sudo apt-get update && sudo apt-get install -y jq
+build	Install jq	2025-07-02T11:39:43.0066461Z [36;1msudo apt-get update && sudo apt-get install -y jq[0m
+build	Install jq	2025-07-02T11:39:43.0129606Z shell: /usr/bin/bash -e {0}
+build	Install jq	2025-07-02T11:39:43.0130034Z ##[endgroup]
+build	Install jq	2025-07-02T11:39:43.1448938Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+build	Install jq	2025-07-02T11:39:43.1625086Z Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+build	Install jq	2025-07-02T11:39:43.1800176Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+build	Install jq	2025-07-02T11:39:43.1802727Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+build	Install jq	2025-07-02T11:39:43.1821580Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+build	Install jq	2025-07-02T11:39:43.1850592Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+build	Install jq	2025-07-02T11:39:43.1873110Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+build	Install jq	2025-07-02T11:39:43.2781451Z Get:8 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [1437 B]
+build	Install jq	2025-07-02T11:39:43.4016015Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [24.8 kB]
+build	Install jq	2025-07-02T11:39:43.4063627Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [37.6 kB]
+build	Install jq	2025-07-02T11:39:43.4095999Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [9049 B]
+build	Install jq	2025-07-02T11:39:43.4418067Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1207 kB]
+build	Install jq	2025-07-02T11:39:43.4512165Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [250 kB]
+build	Install jq	2025-07-02T11:39:43.4539264Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [161 kB]
+build	Install jq	2025-07-02T11:39:43.4566386Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1098 kB]
+build	Install jq	2025-07-02T11:39:43.4668007Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [279 kB]
+build	Install jq	2025-07-02T11:39:43.4699679Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [376 kB]
+build	Install jq	2025-07-02T11:39:43.4761586Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1367 kB]
+build	Install jq	2025-07-02T11:39:43.4840285Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [294 kB]
+build	Install jq	2025-07-02T11:39:43.4873238Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+build	Install jq	2025-07-02T11:39:43.4894564Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [22.1 kB]
+build	Install jq	2025-07-02T11:39:43.5324575Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [4972 B]
+build	Install jq	2025-07-02T11:39:43.5334753Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+build	Install jq	2025-07-02T11:39:43.5346511Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7068 B]
+build	Install jq	2025-07-02T11:39:43.5356679Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [16.4 kB]
+build	Install jq	2025-07-02T11:39:43.5364295Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [212 B]
+build	Install jq	2025-07-02T11:39:43.5372753Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+build	Install jq	2025-07-02T11:39:43.5664677Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [958 kB]
+build	Install jq	2025-07-02T11:39:43.5723596Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [172 kB]
+build	Install jq	2025-07-02T11:39:43.5745138Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+build	Install jq	2025-07-02T11:39:43.5754264Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [865 kB]
+build	Install jq	2025-07-02T11:39:43.5810699Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [189 kB]
+build	Install jq	2025-07-02T11:39:43.5839363Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.2 kB]
+build	Install jq	2025-07-02T11:39:43.5846282Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1322 kB]
+build	Install jq	2025-07-02T11:39:43.5922353Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [285 kB]
+build	Install jq	2025-07-02T11:39:43.6366775Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+build	Install jq	2025-07-02T11:39:43.6375024Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+build	Install jq	2025-07-02T11:39:50.4929747Z Fetched 9407 kB in 1s (7285 kB/s)
+build	Install jq	2025-07-02T11:39:51.2134141Z Reading package lists...
+build	Install jq	2025-07-02T11:39:51.2461683Z Reading package lists...
+build	Install jq	2025-07-02T11:39:51.4175745Z Building dependency tree...
+build	Install jq	2025-07-02T11:39:51.4183699Z Reading state information...
+build	Install jq	2025-07-02T11:39:51.6227876Z jq is already the newest version (1.7.1-3build1).
+build	Install jq	2025-07-02T11:39:51.6229084Z 0 upgraded, 0 newly installed, 0 to remove and 45 not upgraded.
+build	Add dummy scripts	﻿2025-07-02T11:39:51.6350372Z ##[group]Run jq '.scripts = {
+build	Add dummy scripts	2025-07-02T11:39:51.6350776Z [36;1mjq '.scripts = {[0m
+build	Add dummy scripts	2025-07-02T11:39:51.6351133Z [36;1m  "lint": "echo Lint successful",[0m
+build	Add dummy scripts	2025-07-02T11:39:51.6351514Z [36;1m  "test": "echo Tests passed"[0m
+build	Add dummy scripts	2025-07-02T11:39:51.6351959Z [36;1m}' package.json > tmp.json && mv tmp.json package.json[0m
+build	Add dummy scripts	2025-07-02T11:39:51.6412222Z shell: /usr/bin/bash -e {0}
+build	Add dummy scripts	2025-07-02T11:39:51.6412587Z ##[endgroup]
+build	Install dependencies	﻿2025-07-02T11:39:51.6643960Z ##[group]Run npm install
+build	Install dependencies	2025-07-02T11:39:51.6644387Z [36;1mnpm install[0m
+build	Install dependencies	2025-07-02T11:39:51.6706105Z shell: /usr/bin/bash -e {0}
+build	Install dependencies	2025-07-02T11:39:51.6706519Z ##[endgroup]
+build	Install dependencies	2025-07-02T11:39:52.0600422Z 
+build	Install dependencies	2025-07-02T11:39:52.0601024Z up to date, audited 1 package in 311ms
+build	Install dependencies	2025-07-02T11:39:52.0611192Z 
+build	Install dependencies	2025-07-02T11:39:52.0611521Z found 0 vulnerabilities
+build	Run lint	﻿2025-07-02T11:39:52.0717377Z ##[group]Run npm run lint
+build	Run lint	2025-07-02T11:39:52.0717698Z [36;1mnpm run lint[0m
+build	Run lint	2025-07-02T11:39:52.0775358Z shell: /usr/bin/bash -e {0}
+build	Run lint	2025-07-02T11:39:52.0775717Z ##[endgroup]
+build	Run lint	2025-07-02T11:39:52.2108823Z 
+build	Run lint	2025-07-02T11:39:52.2109373Z > github-model-test-basic@1.0.0 lint
+build	Run lint	2025-07-02T11:39:52.2109936Z > echo Lint successful
+build	Run lint	2025-07-02T11:39:52.2110207Z 
+build	Run lint	2025-07-02T11:39:52.2210003Z Lint successful
+build	Run tests	﻿2025-07-02T11:39:52.2324150Z ##[group]Run npm test
+build	Run tests	2025-07-02T11:39:52.2324598Z [36;1mnpm test[0m
+build	Run tests	2025-07-02T11:39:52.2384919Z shell: /usr/bin/bash -e {0}
+build	Run tests	2025-07-02T11:39:52.2385233Z ##[endgroup]
+build	Run tests	2025-07-02T11:39:52.3752136Z 
+build	Run tests	2025-07-02T11:39:52.3752851Z > github-model-test-basic@1.0.0 test
+build	Run tests	2025-07-02T11:39:52.3753563Z > echo Tests passed
+build	Run tests	2025-07-02T11:39:52.3753838Z 
+build	Run tests	2025-07-02T11:39:52.3795056Z Tests passed
+build	Post Setup Node.js	﻿2025-07-02T11:39:52.3926280Z Post job cleanup.
+build	Post Checkout code	﻿2025-07-02T11:39:52.5609173Z Post job cleanup.
+build	Post Checkout code	2025-07-02T11:39:52.6550921Z [command]/usr/bin/git version
+build	Post Checkout code	2025-07-02T11:39:52.6587957Z git version 2.49.0
+build	Post Checkout code	2025-07-02T11:39:52.6632836Z Temporarily overriding HOME='/home/runner/work/_temp/566930f0-9bfd-47b2-9479-970295c92341' before making global git config changes
+build	Post Checkout code	2025-07-02T11:39:52.6634343Z Adding repository directory to the temporary git global config as a safe directory
+build	Post Checkout code	2025-07-02T11:39:52.6638619Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	Post Checkout code	2025-07-02T11:39:52.6676565Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	Post Checkout code	2025-07-02T11:39:52.6708724Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	Post Checkout code	2025-07-02T11:39:52.6943067Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	Post Checkout code	2025-07-02T11:39:52.6967608Z http.https://github.com/.extraheader
+build	Post Checkout code	2025-07-02T11:39:52.6981080Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+build	Post Checkout code	2025-07-02T11:39:52.7012567Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	Complete job	﻿2025-07-02T11:39:52.7352409Z Cleaning up orphan processes
