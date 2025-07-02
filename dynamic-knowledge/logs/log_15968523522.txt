@@ -1,0 +1,492 @@
+precheck	UNKNOWN STEP	﻿2025-06-30T08:59:27.1117701Z Current runner version: '2.325.0'
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1140876Z ##[group]Runner Image Provisioner
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1141767Z Hosted Compute Agent
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1142390Z Version: 20250620.352
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1142982Z Commit: f262f3aba23b10ea191b2a62bdee1ca4c3d344da
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1143677Z Build Date: 2025-06-20T19:27:17Z
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1144221Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1144860Z ##[group]Operating System
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1145422Z Ubuntu
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1145833Z 24.04.2
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1146349Z LTS
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1146772Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1147241Z ##[group]Runner Image
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1147873Z Image: ubuntu-24.04
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1148337Z Version: 20250622.1.0
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1149513Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250622.1/images/ubuntu/Ubuntu2404-Readme.md
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1151139Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250622.1
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1152189Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1153306Z ##[group]GITHUB_TOKEN Permissions
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1155084Z Actions: read
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1155715Z Contents: read
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1156221Z Metadata: read
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1156697Z Models: read
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1157261Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1159213Z Secret source: Actions
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1160185Z Prepare workflow directory
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1816065Z Prepare all required actions
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.1870141Z Getting action download info
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.4948047Z ##[group]Download immutable action package 'actions/checkout@v4'
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.4949127Z Version: 4.2.2
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.4950379Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.4951530Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.4952313Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.5723497Z ##[group]Download immutable action package 'actions/upload-artifact@v4'
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.5724343Z Version: 4.6.2
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.5725105Z Digest: sha256:290722aa3281d5caf23d0acdc3dbeb3424786a1a01a9cc97e72f147225e37c38
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.5726083Z Source commit SHA: ea165f8d65b6e75b540449e92b4886f43607fa02
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.5726771Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.7529236Z Complete job name: precheck
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8125714Z ##[group]Run actions/checkout@v4
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8126541Z with:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8126988Z   repository: yashmahi88/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8127688Z   token: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8128063Z   ssh-strict: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8128454Z   ssh-user: git
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8128852Z   persist-credentials: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8129456Z   clean: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8129860Z   sparse-checkout-cone-mode: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8130325Z   fetch-depth: 1
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8130708Z   fetch-tags: false
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8131115Z   show-progress: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8131568Z   lfs: false
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8131976Z   submodules: false
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8132449Z   set-safe-directory: true
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8133157Z env:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8133727Z   GITHUB_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8134221Z   GH_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.8134586Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9194510Z Syncing repository: yashmahi88/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9196319Z ##[group]Getting Git version info
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9197165Z Working directory is '/home/runner/work/github-model-test-basic/github-model-test-basic'
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9198245Z [command]/usr/bin/git version
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9226131Z git version 2.49.0
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9251770Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9265448Z Temporarily overriding HOME='/home/runner/work/_temp/4eec9e06-80a6-496b-9565-0d86fd37713b' before making global git config changes
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9276672Z Adding repository directory to the temporary git global config as a safe directory
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9277972Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9310029Z Deleting the contents of '/home/runner/work/github-model-test-basic/github-model-test-basic'
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9313465Z ##[group]Initializing the repository
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9317359Z [command]/usr/bin/git init /home/runner/work/github-model-test-basic/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9368066Z hint: Using 'master' as the name for the initial branch. This default branch name
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9369956Z hint: is subject to change. To configure the initial branch name to use in all
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9371486Z hint: of your new repositories, which will suppress this warning, call:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9372581Z hint:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9373353Z hint: 	git config --global init.defaultBranch <name>
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9374302Z hint:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9375183Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9376577Z hint: 'development'. The just-created branch can be renamed via this command:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9377592Z hint:
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9378193Z hint: 	git branch -m <name>
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9379108Z Initialized empty Git repository in /home/runner/work/github-model-test-basic/github-model-test-basic/.git/
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9383387Z [command]/usr/bin/git remote add origin https://github.com/yashmahi88/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9414359Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9415636Z ##[group]Disabling automatic garbage collection
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9418964Z [command]/usr/bin/git config --local gc.auto 0
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9447688Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9448990Z ##[group]Setting up auth
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9455124Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9485514Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9732723Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9762466Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+precheck	UNKNOWN STEP	2025-06-30T08:59:27.9976010Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.0009544Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.0010826Z ##[group]Fetching the repository
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.0028495Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3c3c35c554b9a7f10ff9b1481163b9fa848d139e:refs/remotes/origin/master
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4126589Z From https://github.com/yashmahi88/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4128326Z  * [new ref]         3c3c35c554b9a7f10ff9b1481163b9fa848d139e -> origin/master
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4154124Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4155537Z ##[group]Determining the checkout info
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4157238Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4162620Z [command]/usr/bin/git sparse-checkout disable
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4204246Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4233157Z ##[group]Checking out the ref
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4237579Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4282972Z Reset branch 'master'
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4286136Z branch 'master' set up to track 'origin/master'.
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4292953Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4328014Z [command]/usr/bin/git log -1 --format=%H
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4350687Z 3c3c35c554b9a7f10ff9b1481163b9fa848d139e
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4548315Z ##[group]Run echo "🔍 Discovering all knowledge base files..."
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4549895Z [36;1mecho "🔍 Discovering all knowledge base files..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4550940Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4551413Z [36;1m# Create working directories[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4552519Z [36;1mmkdir -p batches processed summaries temp[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4553385Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4553928Z [36;1m# Find ALL knowledge base files (no limit)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4555712Z [36;1mfind . -path "./knowledge-base/*" \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4557366Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4557977Z [36;1mTOTAL_FILES=$(wc -l < all_knowledge_files.list)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4559098Z [36;1mecho "📊 Found $TOTAL_FILES knowledge base files"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4560161Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4560643Z [36;1mif [[ $TOTAL_FILES -eq 0 ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4561916Z [36;1m  echo "❌ No knowledge base files found in ./knowledge-base/ directory"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4563107Z [36;1m  exit 1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4563580Z [36;1mfi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4564020Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4564755Z [36;1m# Calculate batch size based on file count and size limits[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4565903Z [36;1mMAX_BATCH_SIZE=50  # Files per batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4566922Z [36;1mMAX_CHARS_PER_BATCH=50000  # Characters per batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4567835Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4568254Z [36;1m# Create batches[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4568850Z [36;1mbatch_num=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4569497Z [36;1mcurrent_batch_size=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4570141Z [36;1mcurrent_batch_chars=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4570746Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4571195Z [36;1mwhile IFS= read -r file; do[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4571924Z [36;1m  if [[ -f "$file" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4572810Z [36;1m    file_size=$(wc -c < "$file" 2>/dev/null || echo 0)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4573712Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4574225Z [36;1m    # Check if we need a new batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4575180Z [36;1m    if [[ $current_batch_size -ge $MAX_BATCH_SIZE ]] || \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4576528Z [36;1m       [[ $((current_batch_chars + file_size)) -gt $MAX_CHARS_PER_BATCH ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4577754Z [36;1m      batch_num=$((batch_num + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4578552Z [36;1m      current_batch_size=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4579421Z [36;1m      current_batch_chars=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4580127Z [36;1m    fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4580579Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4581083Z [36;1m    # Add file to current batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4582014Z [36;1m    echo "$file" >> "batches/batch_${batch_num}.list"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4583090Z [36;1m    current_batch_size=$((current_batch_size + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4584313Z [36;1m    current_batch_chars=$((current_batch_chars + file_size))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4585349Z [36;1m  fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4585850Z [36;1mdone < all_knowledge_files.list[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4586578Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4587040Z [36;1mTOTAL_BATCHES=$((batch_num + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4588050Z [36;1mecho "📦 Created $TOTAL_BATCHES batches for processing"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4589402Z [36;1mecho "total_files=$TOTAL_FILES" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4590642Z [36;1mecho "total_batches=$TOTAL_BATCHES" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4678356Z shell: /usr/bin/bash -e {0}
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4679008Z env:
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4680063Z   GITHUB_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4680794Z   GH_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4681261Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4777277Z 🔍 Discovering all knowledge base files...
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4827937Z 📊 Found 1 knowledge base files
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4845794Z 📦 Created 1 batches for processing
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4914156Z ##[group]Run echo "⚙️ Processing all file batches..."
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4915293Z [36;1mecho "⚙️ Processing all file batches..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4916127Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4916900Z [36;1mTOTAL_BATCHES=$(ls batches/batch_*.list 2>/dev/null | wc -l)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4917951Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4918639Z [36;1mif [[ $TOTAL_BATCHES -eq 0 ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4919764Z [36;1m  echo "❌ No batches found to process"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4920591Z [36;1m  exit 1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4921056Z [36;1mfi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4921473Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4921909Z [36;1m# Process each batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4922680Z [36;1mfor batch_file in batches/batch_*.list; do[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4923664Z [36;1m  batch_name=$(basename "$batch_file" .list)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4924588Z [36;1m  echo "🔄 Processing $batch_name..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4925349Z [36;1m  [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4925905Z [36;1m  # Combine all files in this batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4926690Z [36;1m  batch_content=""[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4927305Z [36;1m  files_in_batch=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4927883Z [36;1m  [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4928351Z [36;1m  while IFS= read -r file; do[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4929097Z [36;1m    if [[ -f "$file" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4930071Z [36;1m      echo "  📄 Adding: $file"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4931124Z [36;1m      file_basename=$(basename "$file" | sed 's/[^a-zA-Z0-9]/_/g')[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4932152Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4932701Z [36;1m      # Add file header and content[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4933554Z [36;1m      batch_content+="=== FILE: $file ===\n"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4934332Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4934848Z [36;1m      # Read file content safely[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4935733Z [36;1m      if file_content=$(cat "$file" 2>/dev/null); then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4936709Z [36;1m        batch_content+="$file_content\n\n"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4937609Z [36;1m        files_in_batch=$((files_in_batch + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4938399Z [36;1m      else[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4939018Z [36;1m        echo "    ⚠️ Warning: Could not read $file"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4939995Z [36;1m      fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4940453Z [36;1m    fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4940940Z [36;1m  done < "$batch_file"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4941564Z [36;1m  [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4942012Z [36;1m  # Save batch content[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4942977Z [36;1m  echo -e "$batch_content" > "processed/${batch_name}_content.txt"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4944259Z [36;1m  echo "✅ $batch_name: $files_in_batch files processed"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4945183Z [36;1mdone[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4945601Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4946166Z [36;1mecho "📊 All batches processed successfully"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4999356Z shell: /usr/bin/bash -e {0}
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.4999968Z env:
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5000819Z   GITHUB_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5001600Z   GH_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5002103Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5077332Z ⚙️ Processing all file batches...
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5107043Z 🔄 Processing batch_0...
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5108450Z   📄 Adding: ./knowledge-base/main_ci_description_pass.txt
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5142543Z ✅ batch_0: 1 files processed
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5143853Z 📊 All batches processed successfully
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5190760Z ##[group]Run echo "🎯 Extracting rules from all batches using GitHub Models..."
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5192446Z [36;1mecho "🎯 Extracting rules from all batches using GitHub Models..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5193547Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5194041Z [36;1m# Read target workflow for context[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5195091Z [36;1mWORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5196047Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5196747Z [36;1m# Extract workflow keywords for targeted rule extraction[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5198624Z [36;1mWORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5200646Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5201100Z [36;1mall_extracted_rules=""[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5201771Z [36;1mbatch_count=0[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5202300Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5202744Z [36;1m# Process each batch file[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5203980Z [36;1mfor batch_content_file in processed/batch_*_content.txt; do[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5205106Z [36;1m  if [[ -f "$batch_content_file" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5206181Z [36;1m    batch_name=$(basename "$batch_content_file" _content.txt)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5207332Z [36;1m    echo "🤖 Extracting rules from $batch_name..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5208177Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5208774Z [36;1m    BATCH_CONTENT=$(cat "$batch_content_file")[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5209883Z [36;1m    BATCH_SIZE=$(echo "$BATCH_CONTENT" | wc -c)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5210713Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5211235Z [36;1m    # Truncate if too large for API[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5212006Z [36;1m    MAX_BATCH_SIZE=40000[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5212823Z [36;1m    if [[ $BATCH_SIZE -gt $MAX_BATCH_SIZE ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5214092Z [36;1m      echo "  ⚠️ Batch too large ($BATCH_SIZE chars), truncating to $MAX_BATCH_SIZE"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5215608Z [36;1m      BATCH_CONTENT=$(echo "$BATCH_CONTENT" | head -c $MAX_BATCH_SIZE)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5216646Z [36;1m    fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5217090Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5217598Z [36;1m    # Create extraction prompt[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5218385Z [36;1m    EXTRACTION_PROMPT=$(cat <<EOF[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5219739Z [36;1mTASK: Extract workflow analysis rules from the knowledge base content below.[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5220988Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5221570Z [36;1mTARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5222399Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5222830Z [36;1mINSTRUCTIONS:[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5223723Z [36;1m1. Find rules/patterns that relate to GitHub Actions workflows[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5225147Z [36;1m2. Focus on rules mentioning these keywords: $WORKFLOW_KEYWORDS[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5226399Z [36;1m3. Extract rules about success/failure conditions[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5227919Z [36;1m4. Format each rule as: "RULE: [description] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [filename]"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5229379Z [36;1m5. Maximum 30 rules per batch[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5230193Z [36;1m6. Only extract rules, no explanations[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5230955Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5231398Z [36;1mKNOWLEDGE BASE CONTENT:[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5232040Z [36;1m$BATCH_CONTENT[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5232573Z [36;1mEOF[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5232988Z [36;1m    )[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5233425Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5234137Z [36;1m    ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5235081Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5235589Z [36;1m    # Make API call with retry logic[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5236346Z [36;1m    attempt=1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5236889Z [36;1m    max_attempts=3[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5237484Z [36;1m    success=false[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5238037Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5239009Z [36;1m    while [[ $attempt -le $max_attempts ]] && [[ "$success" != "true" ]]; do[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5241291Z [36;1m      echo "    🔄 Attempt $attempt/$max_attempts for $batch_name"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5242254Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5243213Z [36;1m      RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5244680Z [36;1m        -H "Authorization: ***" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5245538Z [36;1m        -H "Content-Type: application/json" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5246342Z [36;1m        -d "{[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5246939Z [36;1m          \"model\": \"openai/gpt-4o\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5247699Z [36;1m          \"messages\": [{[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5248395Z [36;1m            \"role\": \"system\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5250175Z [36;1m            \"content\": \"You are a rule extractor. Extract only the rules from the provided content. Do not add external knowledge.\"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5251834Z [36;1m          }, {[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5252566Z [36;1m            \"role\": \"user\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5253333Z [36;1m            \"content\": $ESCAPED_PROMPT[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5254071Z [36;1m          }],[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5254635Z [36;1m          \"temperature\": 0.0,[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5255356Z [36;1m          \"max_tokens\": 1200[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5256019Z [36;1m        }")[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5256486Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5257374Z [36;1m      if echo "$RESPONSE" | jq -e '.choices[0].message.content' > /dev/null 2>&1; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5258934Z [36;1m        EXTRACTED_RULES=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5260155Z [36;1m        [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5260956Z [36;1m        if [[ -n "$EXTRACTED_RULES" ]] && [[ "$EXTRACTED_RULES" != "null" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5262299Z [36;1m          echo "$EXTRACTED_RULES" > "summaries/${batch_name}_rules.txt"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5263436Z [36;1m          all_extracted_rules+="$EXTRACTED_RULES\n"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5264277Z [36;1m          success=true[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5265145Z [36;1m          echo "    ✅ Successfully extracted rules from $batch_name"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5266084Z [36;1m        fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5266557Z [36;1m      else[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5267301Z [36;1m        echo "    ❌ API call failed for $batch_name (attempt $attempt)"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5268274Z [36;1m      fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5268723Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5269207Z [36;1m      attempt=$((attempt + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5269987Z [36;1m      [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5270441Z [36;1m      # Rate limiting[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5271038Z [36;1m      sleep 2[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5271551Z [36;1m    done[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5271985Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5272492Z [36;1m    if [[ "$success" != "true" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5273720Z [36;1m      echo "    ⚠️ Failed to extract rules from $batch_name after $max_attempts attempts"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5274893Z [36;1m    fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5275320Z [36;1m    [0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5275820Z [36;1m    batch_count=$((batch_count + 1))[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5276543Z [36;1m  fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5276957Z [36;1mdone[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5277366Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5277815Z [36;1m# Save all extracted rules[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5278714Z [36;1mecho -e "$all_extracted_rules" > all_extracted_rules.txt[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5279844Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5280676Z [36;1mTOTAL_RULES=$(echo -e "$all_extracted_rules" | grep -c "RULE:" || echo 0)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5282160Z [36;1mecho "📋 Extracted $TOTAL_RULES total rules from $batch_count batches"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5283430Z [36;1mecho "total_rules=$TOTAL_RULES" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5336326Z shell: /usr/bin/bash -e {0}
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5336916Z env:
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5337632Z   GITHUB_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5338310Z   GH_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5338764Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5476016Z 🎯 Extracting rules from all batches using GitHub Models...
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5527703Z 🤖 Extracting rules from batch_0...
+precheck	UNKNOWN STEP	2025-06-30T08:59:28.5606551Z     🔄 Attempt 1/3 for batch_0
+precheck	UNKNOWN STEP	2025-06-30T08:59:38.0898820Z     ✅ Successfully extracted rules from batch_0
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0938560Z 📋 Extracted 11 total rules from 1 batches
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0986419Z ##[group]Run echo "🎯 Final consolidation and analysis..."
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0986909Z [36;1mecho "🎯 Final consolidation and analysis..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0987187Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0987426Z [36;1mWORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0987766Z [36;1mALL_RULES=$(cat all_extracted_rules.txt)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0988019Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0988194Z [36;1m# Count and validate rules[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0988505Z [36;1mRULE_COUNT=$(echo "$ALL_RULES" | grep -c "RULE:" || echo 0)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0989060Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0989233Z [36;1mif [[ $RULE_COUNT -eq 0 ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0989842Z [36;1m  echo "❌ No rules extracted from knowledge base"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0990215Z [36;1m  echo "prediction=INSUFFICIENT_KNOWLEDGE" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0990601Z [36;1m  echo "should_continue=false" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0990946Z [36;1m  exit 1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0991116Z [36;1mfi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0991283Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0991547Z [36;1mecho "📊 Analyzing workflow against $RULE_COUNT extracted rules..."[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0991875Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0992082Z [36;1m# Truncate rules if too many[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0992312Z [36;1mMAX_RULES_SIZE=30000[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0992555Z [36;1mRULES_SIZE=$(echo "$ALL_RULES" | wc -c)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0992814Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0993030Z [36;1mif [[ $RULES_SIZE -gt $MAX_RULES_SIZE ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0993418Z [36;1m  echo "⚠️ Rules too large ($RULES_SIZE chars), truncating to $MAX_RULES_SIZE"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0993838Z [36;1m  ALL_RULES=$(echo "$ALL_RULES" | head -c $MAX_RULES_SIZE)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0994127Z [36;1mfi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0994293Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0994496Z [36;1m# Final analysis prompt[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0994764Z [36;1mANALYSIS_PROMPT=$(cat <<EOF[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0995204Z [36;1mCRITICAL: You are constrained to ONLY the extracted rules below. Do not use external knowledge.[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0995616Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0995835Z [36;1mEXTRACTED RULES (your only knowledge source):[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0996108Z [36;1m$ALL_RULES[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0996291Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0996465Z [36;1mWORKFLOW TO ANALYZE:[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0996681Z [36;1m$WORKFLOW_CONTENT[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0996879Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0997047Z [36;1mINSTRUCTIONS:[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0997315Z [36;1m1. Check workflow against each relevant extracted rule[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0997657Z [36;1m2. Count PASS rules that are satisfied[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0997935Z [36;1m3. Count FAIL rules that are violated[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0998233Z [36;1m4. List specific violations and satisfactions[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0998537Z [36;1m5. Base prediction ONLY on rule analysis[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0998796Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0998965Z [36;1mOUTPUT FORMAT:[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0999171Z [36;1mAPPLICABLE_RULES: [number][0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0999624Z [36;1mSATISFIED_RULES: [number and list][0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.0999889Z [36;1mVIOLATED_RULES: [number and list][0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1000164Z [36;1mPREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1000430Z [36;1mEOF[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1000593Z [36;1m)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1000740Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1000966Z [36;1mESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1001241Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1001420Z [36;1m# Final analysis API call[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1001789Z [36;1mRESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1002407Z [36;1m  -H "Authorization: ***" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1002687Z [36;1m  -H "Content-Type: application/json" \[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1002946Z [36;1m  -d "{[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1003328Z [36;1m    \"model\": \"openai/gpt-4o\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1003584Z [36;1m    \"messages\": [{[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1003801Z [36;1m      \"role\": \"system\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1004301Z [36;1m      \"content\": \"You are a rule-based workflow analyzer. You can ONLY use the provided extracted rules. You have no other knowledge.\"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1004801Z [36;1m    }, {[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1004980Z [36;1m      \"role\": \"user\",[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1005234Z [36;1m      \"content\": $ESCAPED_PROMPT[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1005478Z [36;1m    }],[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1005784Z [36;1m    \"temperature\": 0.0,[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1006014Z [36;1m    \"max_tokens\": 1500[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1006226Z [36;1m  }")[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1006392Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1006618Z [36;1mecho "$RESPONSE" > final_analysis_response.json[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1006891Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1007232Z [36;1mANALYSIS_RESULT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No response"')[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1007649Z [36;1mecho "📄 Final Analysis Result:"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1007899Z [36;1mecho "$ANALYSIS_RESULT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1008120Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1008354Z [36;1m# Extract prediction with multiple fallback patterns[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1008941Z [36;1mPREDICTION=$(echo "$ANALYSIS_RESULT" | grep -oiE 'PREDICTION[: ]+[A-Z_]+' | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+).*/\1/' | tr '[:lower:]' '[:upper:]')[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1009637Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1009825Z [36;1m# Fallback prediction extraction[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1010094Z [36;1mif [[ -z "$PREDICTION" ]]; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1010416Z [36;1m  if echo "$ANALYSIS_RESULT" | grep -qi "insufficient"; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1010748Z [36;1m    PREDICTION="INSUFFICIENT_KNOWLEDGE"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1011071Z [36;1m  elif echo "$ANALYSIS_RESULT" | grep -qi "fail"; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1011380Z [36;1m    PREDICTION="FAIL"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1011649Z [36;1m  elif echo "$ANALYSIS_RESULT" | grep -qi "pass"; then[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1011960Z [36;1m    PREDICTION="PASS"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1012177Z [36;1m  else[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1012383Z [36;1m    PREDICTION="INSUFFICIENT_KNOWLEDGE"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1012635Z [36;1m  fi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1012814Z [36;1mfi[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1012975Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1013171Z [36;1mecho "🎯 Final Prediction: $PREDICTION"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1013483Z [36;1mecho "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1013774Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1013951Z [36;1m# Save analysis details[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1014209Z [36;1mecho "$ANALYSIS_RESULT" > final_analysis.txt[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1014477Z [36;1m[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1014643Z [36;1mcase "$PREDICTION" in[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1014861Z [36;1m  "PASS")[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1015143Z [36;1m    echo "✅ Workflow analysis PASSED based on extracted rules"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1015494Z [36;1m    echo "should_continue=true" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1015765Z [36;1m    ;;[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1015939Z [36;1m  "FAIL")[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1016197Z [36;1m    echo "❌ Workflow analysis FAILED based on extracted rules"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1016554Z [36;1m    echo "should_continue=false" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1016824Z [36;1m    exit 1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1017011Z [36;1m    ;;[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1017188Z [36;1m  *)[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1017425Z [36;1m    echo "⚠️ Insufficient knowledge or unclear prediction"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1017781Z [36;1m    echo "should_continue=false" >> "$GITHUB_OUTPUT"[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1018056Z [36;1m    exit 1[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1018236Z [36;1m    ;;[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1018406Z [36;1mesac[0m
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1080243Z shell: /usr/bin/bash -e {0}
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1080472Z env:
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1080977Z   GITHUB_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1081254Z   GH_TOKEN: ***
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1081426Z ##[endgroup]
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1153290Z 🎯 Final consolidation and analysis...
+precheck	UNKNOWN STEP	2025-06-30T08:59:40.1195455Z 📊 Analyzing workflow against 11 extracted rules...
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8541927Z 📄 Final Analysis Result:
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8542396Z APPLICABLE_RULES: 11
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8542623Z 
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8542755Z SATISFIED_RULES: 7  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8543209Z 1. Use the official GitHub action to set up the Node.js version  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8543981Z 2. `npm init -y` must be executed to initialize a basic package.json file  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8544965Z 3. Dummy scripts must be added to package.json for lint and test tasks  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8545616Z 4. `npm install` must be run to install dependencies listed in package.json  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8546377Z 5. Lint script must output "Lint successful" to pass validation  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8546987Z 6. Test script must output "Tests passed" to pass validation  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8547701Z 7. Lint and test scripts must execute without errors to validate the codebase  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8548171Z 
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8548338Z VIOLATED_RULES: 4  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8548831Z 1. Repository code must be checked out to the runner before any setup steps  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8549812Z 2. Node.js version must be explicitly specified in the setup-node action  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8550495Z 3. `jq` must be installed before attempting JSON manipulation  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8551166Z 4. Workflow must validate a basic Node.js project setup without issues  
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8551626Z 
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8551758Z PREDICTION: FAIL
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8576758Z 🎯 Final Prediction: FAIL
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8578352Z ❌ Workflow analysis FAILED based on extracted rules
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8591453Z ##[error]Process completed with exit code 1.
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.8700417Z Post job cleanup.
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9621054Z [command]/usr/bin/git version
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9656997Z git version 2.49.0
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9700540Z Temporarily overriding HOME='/home/runner/work/_temp/ee365946-b23c-484f-a20b-ca6fcf53a3df' before making global git config changes
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9701832Z Adding repository directory to the temporary git global config as a safe directory
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9707121Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9741761Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9774047Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+precheck	UNKNOWN STEP	2025-06-30T08:59:46.9995088Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+precheck	UNKNOWN STEP	2025-06-30T08:59:47.0015979Z http.https://github.com/.extraheader
+precheck	UNKNOWN STEP	2025-06-30T08:59:47.0028163Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+precheck	UNKNOWN STEP	2025-06-30T08:59:47.0058612Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+precheck	UNKNOWN STEP	2025-06-30T08:59:47.0375437Z Cleaning up orphan processes
