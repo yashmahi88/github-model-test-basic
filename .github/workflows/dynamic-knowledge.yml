@@ -1,0 +1,35 @@
+name: Update Dynamic Knowledge Base
+
+on:
+  push:
+#   schedule:
+#     - cron: '0 * * * *' # every hour
+  workflow_dispatch:
+
+jobs:
+  collect-logs:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch GitHub Actions Logs & History
+        run: |
+          mkdir -p dynamic-knowledge
+          gh run list --limit 20 --json databaseId,displayTitle,headBranch,conclusion,status,duration,url > dynamic-knowledge/run_history.json
+          gh run view --log > dynamic-knowledge/latest_logs.txt
+
+      - name: Commit Updated Dynamic Knowledge
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add dynamic-knowledge/*
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "🔁 Update dynamic knowledge from recent runs"
+            git push
+          fi

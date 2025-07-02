@@ -1,6 +1,6 @@
 name: GitHub Model Precheck - Unlimited Files
 on:
-  push:
+  # push:
   workflow_dispatch:
 jobs:
   precheck:
@@ -19,7 +19,7 @@ jobs:
       - name: Discover and Batch Knowledge Files
         id: discover-files
         run: |
-          echo "🔍 Discovering all knowledge base files..."
+          echo "Discovering all knowledge base files..."
           
           # Create working directories
           mkdir -p batches processed summaries temp
@@ -28,7 +28,7 @@ jobs:
           find . -path "./knowledge-base/*" \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list
           
           TOTAL_FILES=$(wc -l < all_knowledge_files.list)
-          echo "📊 Found $TOTAL_FILES knowledge base files"
+          echo "Found $TOTAL_FILES knowledge base files"
           
           if [[ $TOTAL_FILES -eq 0 ]]; then
             echo "❌ No knowledge base files found in ./knowledge-base/ directory"
@@ -64,7 +64,7 @@ jobs:
           done < all_knowledge_files.list
           
           TOTAL_BATCHES=$((batch_num + 1))
-          echo "📦 Created $TOTAL_BATCHES batches for processing"
+          echo "Created $TOTAL_BATCHES batches for processing"
           echo "total_files=$TOTAL_FILES" >> "$GITHUB_OUTPUT"
           echo "total_batches=$TOTAL_BATCHES" >> "$GITHUB_OUTPUT"
       
@@ -76,14 +76,14 @@ jobs:
           TOTAL_BATCHES=$(ls batches/batch_*.list 2>/dev/null | wc -l)
           
           if [[ $TOTAL_BATCHES -eq 0 ]]; then
-            echo "❌ No batches found to process"
+            echo "No batches found to process"
             exit 1
           fi
           
           # Process each batch
           for batch_file in batches/batch_*.list; do
             batch_name=$(basename "$batch_file" .list)
-            echo "🔄 Processing $batch_name..."
+            echo "Processing $batch_name..."
             
             # Combine all files in this batch
             batch_content=""
@@ -91,7 +91,7 @@ jobs:
             
             while IFS= read -r file; do
               if [[ -f "$file" ]]; then
-                echo "  📄 Adding: $file"
+                echo " Adding: $file"
                 file_basename=$(basename "$file" | sed 's/[^a-zA-Z0-9]/_/g')
                 
                 # Add file header and content
@@ -102,7 +102,7 @@ jobs:
                   batch_content+="$file_content\n\n"
                   files_in_batch=$((files_in_batch + 1))
                 else
-                  echo "    ⚠️ Warning: Could not read $file"
+                  echo "Warning: Could not read $file"
                 fi
               fi
             done < "$batch_file"
@@ -112,12 +112,12 @@ jobs:
             echo "✅ $batch_name: $files_in_batch files processed"
           done
           
-          echo "📊 All batches processed successfully"
+          echo "All batches processed successfully"
       
       - name: Extract Rules from Each Batch
         id: extract-rules
         run: |
-          echo "🎯 Extracting rules from all batches using GitHub Models..."
+          echo "Extracting rules from all batches using GitHub Models..."
           
           # Read target workflow for context
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
@@ -132,7 +132,7 @@ jobs:
           for batch_content_file in processed/batch_*_content.txt; do
             if [[ -f "$batch_content_file" ]]; then
               batch_name=$(basename "$batch_content_file" _content.txt)
-              echo "🤖 Extracting rules from $batch_name..."
+              echo "Extracting rules from $batch_name..."
               
               BATCH_CONTENT=$(cat "$batch_content_file")
               BATCH_SIZE=$(echo "$BATCH_CONTENT" | wc -c)
@@ -140,7 +140,7 @@ jobs:
               # Truncate if too large for API
               MAX_BATCH_SIZE=40000
               if [[ $BATCH_SIZE -gt $MAX_BATCH_SIZE ]]; then
-                echo "  ⚠️ Batch too large ($BATCH_SIZE chars), truncating to $MAX_BATCH_SIZE"
+                echo "Batch too large ($BATCH_SIZE chars), truncating to $MAX_BATCH_SIZE"
                 BATCH_CONTENT=$(echo "$BATCH_CONTENT" | head -c $MAX_BATCH_SIZE)
               fi
               
@@ -171,7 +171,7 @@ jobs:
               success=false
               
               while [[ $attempt -le $max_attempts ]] && [[ "$success" != "true" ]]; do
-                echo "    🔄 Attempt $attempt/$max_attempts for $batch_name"
+                echo "Attempt $attempt/$max_attempts for $batch_name"
                 
                 RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
                   -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -196,10 +196,10 @@ jobs:
                     echo "$EXTRACTED_RULES" > "summaries/${batch_name}_rules.txt"
                     all_extracted_rules+="$EXTRACTED_RULES\n"
                     success=true
-                    echo "    ✅ Successfully extracted rules from $batch_name"
+                    echo "✅ Successfully extracted rules from $batch_name"
                   fi
                 else
-                  echo "    ❌ API call failed for $batch_name (attempt $attempt)"
+                  echo "❌ API call failed for $batch_name (attempt $attempt)"
                 fi
                 
                 attempt=$((attempt + 1))
@@ -209,7 +209,7 @@ jobs:
               done
               
               if [[ "$success" != "true" ]]; then
-                echo "    ⚠️ Failed to extract rules from $batch_name after $max_attempts attempts"
+                echo "Failed to extract rules from $batch_name after $max_attempts attempts"
               fi
               
               batch_count=$((batch_count + 1))
@@ -226,7 +226,7 @@ jobs:
       - name: Consolidate and Analyze
         id: final-analysis
         run: |
-          echo "🎯 Final consolidation and analysis..."
+          echo "Final consolidation and analysis..."
           
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ALL_RULES=$(cat all_extracted_rules.txt)
@@ -241,14 +241,14 @@ jobs:
             exit 1
           fi
           
-          echo "📊 Analyzing workflow against $RULE_COUNT extracted rules..."
+          echo "Analyzing workflow against $RULE_COUNT extracted rules..."
           
           # Truncate rules if too many
           MAX_RULES_SIZE=30000
           RULES_SIZE=$(echo "$ALL_RULES" | wc -c)
           
           if [[ $RULES_SIZE -gt $MAX_RULES_SIZE ]]; then
-            echo "⚠️ Rules too large ($RULES_SIZE chars), truncating to $MAX_RULES_SIZE"
+            echo "Rules too large ($RULES_SIZE chars), truncating to $MAX_RULES_SIZE"
             ALL_RULES=$(echo "$ALL_RULES" | head -c $MAX_RULES_SIZE)
           fi
           
@@ -299,7 +299,7 @@ jobs:
           echo "$RESPONSE" > final_analysis_response.json
           
           ANALYSIS_RESULT=$(echo "$RESPONSE" | jq -r '.choices[0].message.content // "No response"')
-          echo "📄 Final Analysis Result:"
+          echo "Final Analysis Result:"
           echo "$ANALYSIS_RESULT"
           
           # Extract prediction with multiple fallback patterns
@@ -318,7 +318,7 @@ jobs:
             fi
           fi
           
-          echo "🎯 Final Prediction: $PREDICTION"
+          echo "Final Prediction: $PREDICTION"
           echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
           
           # Save analysis details
@@ -357,7 +357,7 @@ jobs:
       - name: Trigger Main Workflow
         if: steps.final-analysis.outputs.should_continue == 'true'
         run: |
-          echo "🚀 Triggering main workflow after successful analysis"
+          echo "Triggering main workflow after successful analysis"
           gh workflow run 'Main CI Workflow'
         env:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN}}
