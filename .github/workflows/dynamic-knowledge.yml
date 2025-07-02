@@ -21,7 +21,7 @@ jobs:
           mkdir -p dynamic-knowledge/logs
 
           # Get run info for main-ci.yml only (change if your workflow name is different)
-          gh run list --workflow="main-ci.yml" --limit 10 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json          
+          gh run list --workflow="train-precheck.yml" --limit 10 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json          
           # Extract finished run IDs (not in_progress)
           jq -r '.[] | select(.status == "completed") | .databaseId' dynamic-knowledge/run_history.json | while read -r RUN_ID; do
           echo "Fetching logs for run $RUN_ID..."
@@ -32,10 +32,11 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
           git add dynamic-knowledge/*
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Update dynamic knowledge from recent runs"
-            git push
+            git push origin HEAD
           fi
