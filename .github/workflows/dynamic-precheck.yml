@@ -1,4 +1,4 @@
-name: GitHub Model Precheck - Dynamic Knowledge Base
+name: GitHub Model Precheck - Dynamic Knowledge
 
 on:
   push:
@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Extracting rules from knowledge files and logs..."
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
-          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\\b[a-zA-Z][a-zA-Z0-9_-]*\\b' | sort -u | head -50 | tr '\n' ' ')
 
           all_extracted_rules=""
 
@@ -141,7 +141,7 @@ jobs:
               SATISFIED_RULES
               VIOLATED_RULES
               PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
-            EOF
+          EOF
 
           ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
 
