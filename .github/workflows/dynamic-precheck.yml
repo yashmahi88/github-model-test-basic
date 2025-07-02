@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Extracting rules from knowledge files and logs..."
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
-          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\\b[a-zA-Z][a-zA-Z0-9_-]*\\b' | sort -u | head -50 | tr '\n' ' ')
+          WORKFLOW_KEYWORDS=$(echo "$WORKFLOW_CONTENT" | grep -oE '\b[a-zA-Z][a-zA-Z0-9_-]*\b' | sort -u | head -50 | tr '\n' ' ')
 
           all_extracted_rules=""
 
@@ -85,31 +85,31 @@ jobs:
             BATCH_NAME=$(basename "$batch_file" _content.txt)
             echo "Processing $BATCH_NAME..."
 
-            EXTRACTION_PROMPT=$(cat <<EOF
-          TASK: Extract workflow rules from the content.
-          TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
-          INSTRUCTIONS:
-          1. Extract rules related to GitHub Actions workflows.
-          2. Include conditions for success/failure/warnings.
-          3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
-          CONTENT:
-          $BATCH_CONTENT
-          EOF
+            EXTRACTION_PROMPT=$(cat > temp/extraction_prompt.txt <<EOF
+            TASK: Extract workflow rules from the content.
+            TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
+            INSTRUCTIONS:
+            1. Extract rules related to GitHub Actions workflows.
+            2. Include conditions for success/failure/warnings.
+            3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
+            CONTENT:
+            $BATCH_CONTENT
+            EOF
             )
 
-            ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)
+            ESCAPED_PROMPT=$(jq -Rs . < temp/extraction_prompt.txt)
 
-            cat <<JSON > payload.json
+            cat > payload.json <<EOF
             {
-            "model": "openai/gpt-4o",
-            "messages": [
+              "model": "openai/gpt-4o",
+              "messages": [
                 { "role": "system", "content": "Only extract clearly stated rules." },
                 { "role": "user", "content": $ESCAPED_PROMPT }
-            ],
-            "temperature": 0.0,
-            "max_tokens": 1200
+              ],
+              "temperature": 0.0,
+              "max_tokens": 1200
             }
-            JSON
+            EOF
 
             RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -132,7 +132,7 @@ jobs:
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ALL_RULES=$(cat all_extracted_rules.txt)
 
-          ANALYSIS_PROMPT=$(cat <<EOF
+          cat > temp/final_prompt.txt <<EOF
           EXTRACTED RULES:
           $ALL_RULES
           
@@ -147,21 +147,20 @@ jobs:
             VIOLATED_RULES
             PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
           EOF
-          )
 
-          ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
+          ESCAPED_PROMPT=$(jq -Rs . < temp/final_prompt.txt)
 
-          cat <<JSON > final_payload.json
+          cat > final_payload.json <<EOF
           {
-          "model": "openai/gpt-4o",
-          "messages": [
+            "model": "openai/gpt-4o",
+            "messages": [
               { "role": "system", "content": "Analyze the workflow strictly based on provided rules." },
               { "role": "user", "content": $ESCAPED_PROMPT }
-          ],
-          "temperature": 0.0,
-          "max_tokens": 1500
+            ],
+            "temperature": 0.0,
+            "max_tokens": 1500
           }
-          JSON
+          EOF
 
           RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
