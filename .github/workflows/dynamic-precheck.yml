@@ -81,42 +81,39 @@ jobs:
           all_extracted_rules=""
 
           for batch_file in processed/batch_*_content.txt; do
-            BATCH_CONTENT=$(cat "$batch_file")
             BATCH_NAME=$(basename "$batch_file" _content.txt)
             echo "Processing $BATCH_NAME..."
 
-            cat > temp/extraction_prompt.txt << 'PROMPT_EOF'
-          TASK: Extract workflow rules from the content.
-          TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
-          INSTRUCTIONS:
-          1. Extract rules related to GitHub Actions workflows.
-          2. Include conditions for success/failure/warnings.
-          3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
-          CONTENT:
-          $BATCH_CONTENT
-          PROMPT_EOF
-
-            # Replace variables in the prompt file
-            sed -i "s/\$WORKFLOW_KEYWORDS/$WORKFLOW_KEYWORDS/g" temp/extraction_prompt.txt
-            sed -i "s/\$BATCH_NAME/$BATCH_NAME/g" temp/extraction_prompt.txt
-            sed -i "s/\$BATCH_CONTENT/$BATCH_CONTENT/g" temp/extraction_prompt.txt
+            # Create prompt by directly writing to file
+            {
+              echo "TASK: Extract workflow rules from the content."
+              echo "TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS"
+              echo "INSTRUCTIONS:"
+              echo "1. Extract rules related to GitHub Actions workflows."
+              echo "2. Include conditions for success/failure/warnings."
+              echo "3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]"
+              echo "CONTENT:"
+              cat "$batch_file"
+            } > temp/extraction_prompt.txt
 
             ESCAPED_PROMPT=$(jq -Rs . < temp/extraction_prompt.txt)
 
-            cat > payload.json << 'JSON_EOF'
-          {
-            "model": "openai/gpt-4o",
-            "messages": [
-              { "role": "system", "content": "Only extract clearly stated rules." },
-              { "role": "user", "content": ESCAPED_PROMPT_PLACEHOLDER }
-            ],
-            "temperature": 0.0,
-            "max_tokens": 1200
-          }
-          JSON_EOF
-
-            # Replace the placeholder with the actual escaped prompt
-            sed -i "s/ESCAPED_PROMPT_PLACEHOLDER/$ESCAPED_PROMPT/g" payload.json
+            # Create JSON payload using jq to avoid escaping issues
+            jq -n \
+              --arg model "openai/gpt-4o" \
+              --arg system_content "Only extract clearly stated rules." \
+              --argjson user_content "$ESCAPED_PROMPT" \
+              --arg temperature "0.0" \
+              --arg max_tokens "1200" \
+              '{
+                model: $model,
+                messages: [
+                  { role: "system", content: $system_content },
+                  { role: "user", content: $user_content }
+                ],
+                temperature: ($temperature | tonumber),
+                max_tokens: ($max_tokens | tonumber)
+              }' > payload.json
 
             RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
