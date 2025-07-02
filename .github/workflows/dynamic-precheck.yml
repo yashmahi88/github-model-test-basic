@@ -85,15 +85,15 @@ jobs:
             BATCH_NAME=$(basename "$batch_file" _content.txt)
             echo "Processing $BATCH_NAME..."
 
-            read -r -d '' EXTRACTION_PROMPT <<EOF || true
-            TASK: Extract workflow rules from the content.
-            TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
-            INSTRUCTIONS:
-            1. Extract rules related to GitHub Actions workflows.
-            2. Include conditions for success/failure/warnings.
-            3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
-            CONTENT:
-            $BATCH_CONTENT
+            read -r -d '' EXTRACTION_PROMPT <<-EOF || true
+              TASK: Extract workflow rules from the content.
+              TARGET WORKFLOW KEYWORDS: $WORKFLOW_KEYWORDS
+              INSTRUCTIONS:
+              1. Extract rules related to GitHub Actions workflows.
+              2. Include conditions for success/failure/warnings.
+              3. Format: RULE: [text] | TYPE: [PASS/FAIL/WARNING] | SOURCE: [$BATCH_NAME]
+              CONTENT:
+              $BATCH_CONTENT
             EOF
 
             ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)
@@ -127,19 +127,21 @@ jobs:
           WORKFLOW_CONTENT=$(cat .github/workflows/main-ci.yml)
           ALL_RULES=$(cat all_extracted_rules.txt)
 
-          read -r -d '' ANALYSIS_PROMPT <<EOF || true
-          EXTRACTED RULES:
-          $ALL_RULES  
-          WORKFLOW TO ANALYZE:
-          $WORKFLOW_CONTENT  
-          INSTRUCTIONS:
-          - Evaluate workflow based only on rules.
-          - Output:
-            APPLICABLE_RULES
-            SATISFIED_RULES
-            VIOLATED_RULES
-            PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
-          EOF
+          read -r -d '' ANALYSIS_PROMPT <<-EOF || true
+            EXTRACTED RULES:
+            $ALL_RULES
+
+            WORKFLOW TO ANALYZE:
+            $WORKFLOW_CONTENT
+
+            INSTRUCTIONS:
+            - Evaluate workflow based only on rules.
+            - Output:
+              APPLICABLE_RULES
+              SATISFIED_RULES
+              VIOLATED_RULES
+              PREDICTION: PASS/FAIL/INSUFFICIENT_KNOWLEDGE
+            EOF
 
           ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
 
