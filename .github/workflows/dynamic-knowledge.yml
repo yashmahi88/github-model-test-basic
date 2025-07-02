@@ -19,7 +19,7 @@ jobs:
       - name: Fetch GitHub Actions Logs & History
         run: |
           mkdir -p dynamic-knowledge
-          gh run list --limit 20 --json databaseId,displayTitle,headBranch,conclusion,status,duration,url > dynamic-knowledge/run_history.json
+          gh run list --limit 20 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
           gh run view --log > dynamic-knowledge/latest_logs.txt
 
       - name: Commit Updated Dynamic Knowledge
