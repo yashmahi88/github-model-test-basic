@@ -1,6 +1,6 @@
 name: GitHub Model Precheck - Unlimited Files
 on:
-  # push:
+  push:
   workflow_dispatch:
 jobs:
   precheck:

@@ -41,7 +41,7 @@ jobs:
           Here is the YAML content:
           EOF
           )
-
+ 
           RAW_PROMPT="$RAW_PROMPTS"$'\n'"$WORKFLOW_CONTENT"
 
 
