@@ -99,18 +99,22 @@ jobs:
 
             ESCAPED_PROMPT=$(echo "$EXTRACTION_PROMPT" | jq -Rs .)
 
+            cat <<JSON > payload.json
+            {
+            "model": "openai/gpt-4o",
+            "messages": [
+                { "role": "system", "content": "Only extract clearly stated rules." },
+                { "role": "user", "content": $ESCAPED_PROMPT }
+            ],
+            "temperature": 0.0,
+            "max_tokens": 1200
+            }
+            JSON
+
             RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
               -H "Authorization: Bearer $GITHUB_TOKEN" \
               -H "Content-Type: application/json" \
-              -d "{
-                \"model\": \"openai/gpt-4o\",
-                \"messages\": [
-                  { \"role\": \"system\", \"content\": \"Only extract clearly stated rules.\" },
-                  { \"role\": \"user\", \"content\": $ESCAPED_PROMPT }
-                ],
-                \"temperature\": 0.0,
-                \"max_tokens\": 1200
-              }")
+              --data @payload.json)
 
             RULES=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
             echo "$RULES" > summaries/${BATCH_NAME}_rules.txt
@@ -147,18 +151,22 @@ jobs:
 
           ESCAPED_PROMPT=$(echo "$ANALYSIS_PROMPT" | jq -Rs .)
 
+          cat <<JSON > final_payload.json
+          {
+          "model": "openai/gpt-4o",
+          "messages": [
+              { "role": "system", "content": "Analyze the workflow strictly based on provided rules." },
+              { "role": "user", "content": $ESCAPED_PROMPT }
+          ],
+          "temperature": 0.0,
+          "max_tokens": 1500
+          }
+          JSON
+
           RESPONSE=$(curl -s "https://models.github.ai/inference/chat/completions" \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"model\": \"openai/gpt-4o\",
-              \"messages\": [
-                { \"role\": \"system\", \"content\": \"Analyze the workflow strictly based on provided rules.\" },
-                { \"role\": \"user\", \"content\": $ESCAPED_PROMPT }
-              ],
-              \"temperature\": 0.0,
-              \"max_tokens\": 1500
-            }")
+            --data @final_payload.json)
 
           echo "$RESPONSE" > final_analysis_response.json
 
