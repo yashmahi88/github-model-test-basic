@@ -1,0 +1,233 @@
+build	UNKNOWN STEP	﻿2025-06-30T09:18:22.7139055Z Current runner version: '2.325.0'
+build	UNKNOWN STEP	2025-06-30T09:18:22.7163832Z ##[group]Runner Image Provisioner
+build	UNKNOWN STEP	2025-06-30T09:18:22.7164668Z Hosted Compute Agent
+build	UNKNOWN STEP	2025-06-30T09:18:22.7165393Z Version: 20250620.352
+build	UNKNOWN STEP	2025-06-30T09:18:22.7166035Z Commit: f262f3aba23b10ea191b2a62bdee1ca4c3d344da
+build	UNKNOWN STEP	2025-06-30T09:18:22.7166752Z Build Date: 2025-06-20T19:27:17Z
+build	UNKNOWN STEP	2025-06-30T09:18:22.7167306Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:22.7167908Z ##[group]Operating System
+build	UNKNOWN STEP	2025-06-30T09:18:22.7168494Z Ubuntu
+build	UNKNOWN STEP	2025-06-30T09:18:22.7168941Z 24.04.2
+build	UNKNOWN STEP	2025-06-30T09:18:22.7169445Z LTS
+build	UNKNOWN STEP	2025-06-30T09:18:22.7169880Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:22.7170373Z ##[group]Runner Image
+build	UNKNOWN STEP	2025-06-30T09:18:22.7170888Z Image: ubuntu-24.04
+build	UNKNOWN STEP	2025-06-30T09:18:22.7171461Z Version: 20250622.1.0
+build	UNKNOWN STEP	2025-06-30T09:18:22.7172441Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250622.1/images/ubuntu/Ubuntu2404-Readme.md
+build	UNKNOWN STEP	2025-06-30T09:18:22.7174025Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250622.1
+build	UNKNOWN STEP	2025-06-30T09:18:22.7175170Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:22.7176309Z ##[group]GITHUB_TOKEN Permissions
+build	UNKNOWN STEP	2025-06-30T09:18:22.7178297Z Contents: read
+build	UNKNOWN STEP	2025-06-30T09:18:22.7178811Z Metadata: read
+build	UNKNOWN STEP	2025-06-30T09:18:22.7179419Z Packages: read
+build	UNKNOWN STEP	2025-06-30T09:18:22.7179987Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:22.7182155Z Secret source: Actions
+build	UNKNOWN STEP	2025-06-30T09:18:22.7182949Z Prepare workflow directory
+build	UNKNOWN STEP	2025-06-30T09:18:22.7531762Z Prepare all required actions
+build	UNKNOWN STEP	2025-06-30T09:18:22.7572606Z Getting action download info
+build	UNKNOWN STEP	2025-06-30T09:18:23.2041609Z ##[group]Download immutable action package 'actions/checkout@v4'
+build	UNKNOWN STEP	2025-06-30T09:18:23.2042743Z Version: 4.2.2
+build	UNKNOWN STEP	2025-06-30T09:18:23.2043791Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+build	UNKNOWN STEP	2025-06-30T09:18:23.2044919Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+build	UNKNOWN STEP	2025-06-30T09:18:23.2046072Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.3039040Z ##[group]Download immutable action package 'actions/setup-node@v4'
+build	UNKNOWN STEP	2025-06-30T09:18:23.3039967Z Version: 4.4.0
+build	UNKNOWN STEP	2025-06-30T09:18:23.3040713Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+build	UNKNOWN STEP	2025-06-30T09:18:23.3041708Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+build	UNKNOWN STEP	2025-06-30T09:18:23.3042414Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.4800315Z Complete job name: build
+build	UNKNOWN STEP	2025-06-30T09:18:23.5508101Z ##[group]Run actions/checkout@v4
+build	UNKNOWN STEP	2025-06-30T09:18:23.5508953Z with:
+build	UNKNOWN STEP	2025-06-30T09:18:23.5509414Z   repository: yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:23.5510184Z   token: ***
+build	UNKNOWN STEP	2025-06-30T09:18:23.5510569Z   ssh-strict: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5510965Z   ssh-user: git
+build	UNKNOWN STEP	2025-06-30T09:18:23.5511362Z   persist-credentials: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5511813Z   clean: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5512216Z   sparse-checkout-cone-mode: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5512689Z   fetch-depth: 1
+build	UNKNOWN STEP	2025-06-30T09:18:23.5513072Z   fetch-tags: false
+build	UNKNOWN STEP	2025-06-30T09:18:23.5513469Z   show-progress: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5513863Z   lfs: false
+build	UNKNOWN STEP	2025-06-30T09:18:23.5514229Z   submodules: false
+build	UNKNOWN STEP	2025-06-30T09:18:23.5514619Z   set-safe-directory: true
+build	UNKNOWN STEP	2025-06-30T09:18:23.5515497Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.6618732Z Syncing repository: yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:23.6621052Z ##[group]Getting Git version info
+build	UNKNOWN STEP	2025-06-30T09:18:23.6622051Z Working directory is '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	UNKNOWN STEP	2025-06-30T09:18:23.6623205Z [command]/usr/bin/git version
+build	UNKNOWN STEP	2025-06-30T09:18:23.6659069Z git version 2.49.0
+build	UNKNOWN STEP	2025-06-30T09:18:23.6687144Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.6705526Z Temporarily overriding HOME='/home/runner/work/_temp/22e43fef-8e55-4b83-a0f3-9e955058583a' before making global git config changes
+build	UNKNOWN STEP	2025-06-30T09:18:23.6707890Z Adding repository directory to the temporary git global config as a safe directory
+build	UNKNOWN STEP	2025-06-30T09:18:23.6720812Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:23.6759622Z Deleting the contents of '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	UNKNOWN STEP	2025-06-30T09:18:23.6764024Z ##[group]Initializing the repository
+build	UNKNOWN STEP	2025-06-30T09:18:23.6769442Z [command]/usr/bin/git init /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:23.6840000Z hint: Using 'master' as the name for the initial branch. This default branch name
+build	UNKNOWN STEP	2025-06-30T09:18:23.6841693Z hint: is subject to change. To configure the initial branch name to use in all
+build	UNKNOWN STEP	2025-06-30T09:18:23.6843100Z hint: of your new repositories, which will suppress this warning, call:
+build	UNKNOWN STEP	2025-06-30T09:18:23.6844137Z hint:
+build	UNKNOWN STEP	2025-06-30T09:18:23.6844733Z hint: 	git config --global init.defaultBranch <name>
+build	UNKNOWN STEP	2025-06-30T09:18:23.6845561Z hint:
+build	UNKNOWN STEP	2025-06-30T09:18:23.6846120Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+build	UNKNOWN STEP	2025-06-30T09:18:23.6847013Z hint: 'development'. The just-created branch can be renamed via this command:
+build	UNKNOWN STEP	2025-06-30T09:18:23.6847691Z hint:
+build	UNKNOWN STEP	2025-06-30T09:18:23.6848069Z hint: 	git branch -m <name>
+build	UNKNOWN STEP	2025-06-30T09:18:23.6848990Z Initialized empty Git repository in /home/runner/work/github-model-test-basic/github-model-test-basic/.git/
+build	UNKNOWN STEP	2025-06-30T09:18:23.6857353Z [command]/usr/bin/git remote add origin https://github.com/yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:23.6898446Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.6899677Z ##[group]Disabling automatic garbage collection
+build	UNKNOWN STEP	2025-06-30T09:18:23.6903228Z [command]/usr/bin/git config --local gc.auto 0
+build	UNKNOWN STEP	2025-06-30T09:18:23.6940141Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.6941386Z ##[group]Setting up auth
+build	UNKNOWN STEP	2025-06-30T09:18:23.6948473Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	UNKNOWN STEP	2025-06-30T09:18:23.6983296Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	UNKNOWN STEP	2025-06-30T09:18:23.7292039Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	UNKNOWN STEP	2025-06-30T09:18:23.7323856Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	UNKNOWN STEP	2025-06-30T09:18:23.7552821Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+build	UNKNOWN STEP	2025-06-30T09:18:23.7588556Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:23.7589463Z ##[group]Fetching the repository
+build	UNKNOWN STEP	2025-06-30T09:18:23.7597787Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +51482af3f417d7dcd7432452f514ce1e94ed1664:refs/remotes/origin/master
+build	UNKNOWN STEP	2025-06-30T09:18:24.3950693Z From https://github.com/yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:24.3951663Z  * [new ref]         51482af3f417d7dcd7432452f514ce1e94ed1664 -> origin/master
+build	UNKNOWN STEP	2025-06-30T09:18:24.3978945Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:24.3979628Z ##[group]Determining the checkout info
+build	UNKNOWN STEP	2025-06-30T09:18:24.3981868Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:24.3987977Z [command]/usr/bin/git sparse-checkout disable
+build	UNKNOWN STEP	2025-06-30T09:18:24.4030297Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+build	UNKNOWN STEP	2025-06-30T09:18:24.4058743Z ##[group]Checking out the ref
+build	UNKNOWN STEP	2025-06-30T09:18:24.4063307Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+build	UNKNOWN STEP	2025-06-30T09:18:24.4164689Z Reset branch 'master'
+build	UNKNOWN STEP	2025-06-30T09:18:24.4166681Z branch 'master' set up to track 'origin/master'.
+build	UNKNOWN STEP	2025-06-30T09:18:24.4169246Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:24.4170901Z [command]/usr/bin/git log -1 --format=%H
+build	UNKNOWN STEP	2025-06-30T09:18:24.4188208Z 51482af3f417d7dcd7432452f514ce1e94ed1664
+build	UNKNOWN STEP	2025-06-30T09:18:24.4496495Z ##[group]Run actions/setup-node@v4
+build	UNKNOWN STEP	2025-06-30T09:18:24.4497410Z with:
+build	UNKNOWN STEP	2025-06-30T09:18:24.4498062Z   node-version: 18
+build	UNKNOWN STEP	2025-06-30T09:18:24.4498774Z   always-auth: false
+build	UNKNOWN STEP	2025-06-30T09:18:24.4499492Z   check-latest: false
+build	UNKNOWN STEP	2025-06-30T09:18:24.4500408Z   token: ***
+build	UNKNOWN STEP	2025-06-30T09:18:24.4501058Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:24.6320572Z Found in cache @ /opt/hostedtoolcache/node/18.20.8/x64
+build	UNKNOWN STEP	2025-06-30T09:18:24.6327610Z ##[group]Environment details
+build	UNKNOWN STEP	2025-06-30T09:18:26.3369152Z node: v18.20.8
+build	UNKNOWN STEP	2025-06-30T09:18:26.3369771Z npm: 10.8.2
+build	UNKNOWN STEP	2025-06-30T09:18:26.3370180Z yarn: 1.22.22
+build	UNKNOWN STEP	2025-06-30T09:18:26.3371623Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:26.3496889Z ##[group]Run npm init -y
+build	UNKNOWN STEP	2025-06-30T09:18:26.3497337Z [36;1mnpm init -y[0m
+build	UNKNOWN STEP	2025-06-30T09:18:26.3611588Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:26.3612004Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:28.3377651Z Wrote to /home/runner/work/github-model-test-basic/github-model-test-basic/package.json:
+build	UNKNOWN STEP	2025-06-30T09:18:28.3378219Z 
+build	UNKNOWN STEP	2025-06-30T09:18:28.3378384Z {
+build	UNKNOWN STEP	2025-06-30T09:18:28.3378669Z   "name": "github-model-test-basic",
+build	UNKNOWN STEP	2025-06-30T09:18:28.3379145Z   "version": "1.0.0",
+build	UNKNOWN STEP	2025-06-30T09:18:28.3379430Z   "main": "index.js",
+build	UNKNOWN STEP	2025-06-30T09:18:28.3379666Z   "scripts": {
+build	UNKNOWN STEP	2025-06-30T09:18:28.3380047Z     "test": "echo \"Error: no test specified\" && exit 1"
+build	UNKNOWN STEP	2025-06-30T09:18:28.3380439Z   },
+build	UNKNOWN STEP	2025-06-30T09:18:28.3380671Z   "keywords": [],
+build	UNKNOWN STEP	2025-06-30T09:18:28.3380902Z   "author": "",
+build	UNKNOWN STEP	2025-06-30T09:18:28.3381150Z   "license": "ISC",
+build	UNKNOWN STEP	2025-06-30T09:18:28.3381384Z   "description": ""
+build	UNKNOWN STEP	2025-06-30T09:18:28.3381612Z }
+build	UNKNOWN STEP	2025-06-30T09:18:28.3381736Z 
+build	UNKNOWN STEP	2025-06-30T09:18:28.3381758Z 
+build	UNKNOWN STEP	2025-06-30T09:18:28.3391526Z 
+build	UNKNOWN STEP	2025-06-30T09:18:28.3498148Z ##[group]Run sudo apt-get update && sudo apt-get install -y jq
+build	UNKNOWN STEP	2025-06-30T09:18:28.3498644Z [36;1msudo apt-get update && sudo apt-get install -y jq[0m
+build	UNKNOWN STEP	2025-06-30T09:18:28.3559278Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:28.3559540Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:28.4378224Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.4756884Z Hit:6 https://packages.microsoft.com/repos/azure-cli noble InRelease
+build	UNKNOWN STEP	2025-06-30T09:18:28.4763050Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+build	UNKNOWN STEP	2025-06-30T09:18:28.4764381Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.4787339Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.4847906Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.4877721Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.6654896Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [8989 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.6762204Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [37.4 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.6899338Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [24.7 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7178684Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1168 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7253492Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [246 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7276080Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [161 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7308472Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1092 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7447610Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [278 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7476745Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [376 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7510259Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1274 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7587258Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [271 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7648840Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.7663396Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [22.1 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8103242Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [4972 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8115575Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8127063Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7076 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8138836Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [16.4 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8149638Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [212 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8158856Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8393603Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [920 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8452248Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [169 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8473104Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.6 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8490210Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [860 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8542556Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [188 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8563722Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [52.2 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8578544Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1235 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.8642248Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [263 kB]
+build	UNKNOWN STEP	2025-06-30T09:18:28.9101212Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+build	UNKNOWN STEP	2025-06-30T09:18:28.9112092Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+build	UNKNOWN STEP	2025-06-30T09:18:35.4603688Z Fetched 9079 kB in 1s (7500 kB/s)
+build	UNKNOWN STEP	2025-06-30T09:18:36.1701271Z Reading package lists...
+build	UNKNOWN STEP	2025-06-30T09:18:36.2018589Z Reading package lists...
+build	UNKNOWN STEP	2025-06-30T09:18:36.3983816Z Building dependency tree...
+build	UNKNOWN STEP	2025-06-30T09:18:36.3992490Z Reading state information...
+build	UNKNOWN STEP	2025-06-30T09:18:36.6514919Z jq is already the newest version (1.7.1-3build1).
+build	UNKNOWN STEP	2025-06-30T09:18:36.6516073Z 0 upgraded, 0 newly installed, 0 to remove and 33 not upgraded.
+build	UNKNOWN STEP	2025-06-30T09:18:36.6566929Z ##[group]Run jq '.scripts = {
+build	UNKNOWN STEP	2025-06-30T09:18:36.6567214Z [36;1mjq '.scripts = {[0m
+build	UNKNOWN STEP	2025-06-30T09:18:36.6567443Z [36;1m  "lint": "echo Lint successful",[0m
+build	UNKNOWN STEP	2025-06-30T09:18:36.6567696Z [36;1m  "test": "echo Tests passed"[0m
+build	UNKNOWN STEP	2025-06-30T09:18:36.6568000Z [36;1m}' package.json > tmp.json && mv tmp.json package.json[0m
+build	UNKNOWN STEP	2025-06-30T09:18:36.6685710Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:36.6686045Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:36.6884833Z ##[group]Run npm install
+build	UNKNOWN STEP	2025-06-30T09:18:36.6885331Z [36;1mnpm install[0m
+build	UNKNOWN STEP	2025-06-30T09:18:36.6941545Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:36.6941768Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:37.0928397Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.0929106Z up to date, audited 1 package in 324ms
+build	UNKNOWN STEP	2025-06-30T09:18:37.0939204Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.0939541Z found 0 vulnerabilities
+build	UNKNOWN STEP	2025-06-30T09:18:37.1034069Z ##[group]Run npm run lint
+build	UNKNOWN STEP	2025-06-30T09:18:37.1034586Z [36;1mnpm run lint[0m
+build	UNKNOWN STEP	2025-06-30T09:18:37.1092353Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:37.1092586Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:37.2445425Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.2446220Z > github-model-test-basic@1.0.0 lint
+build	UNKNOWN STEP	2025-06-30T09:18:37.2446795Z > echo Lint successful
+build	UNKNOWN STEP	2025-06-30T09:18:37.2447043Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.2531694Z Lint successful
+build	UNKNOWN STEP	2025-06-30T09:18:37.2622888Z ##[group]Run npm test
+build	UNKNOWN STEP	2025-06-30T09:18:37.2623132Z [36;1mnpm test[0m
+build	UNKNOWN STEP	2025-06-30T09:18:37.2680323Z shell: /usr/bin/bash -e {0}
+build	UNKNOWN STEP	2025-06-30T09:18:37.2680552Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-30T09:18:37.4046308Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.4046866Z > github-model-test-basic@1.0.0 test
+build	UNKNOWN STEP	2025-06-30T09:18:37.4047421Z > echo Tests passed
+build	UNKNOWN STEP	2025-06-30T09:18:37.4047645Z 
+build	UNKNOWN STEP	2025-06-30T09:18:37.4091677Z Tests passed
+build	UNKNOWN STEP	2025-06-30T09:18:37.4249802Z Post job cleanup.
+build	UNKNOWN STEP	2025-06-30T09:18:37.5916809Z Post job cleanup.
+build	UNKNOWN STEP	2025-06-30T09:18:37.6863142Z [command]/usr/bin/git version
+build	UNKNOWN STEP	2025-06-30T09:18:37.6900595Z git version 2.49.0
+build	UNKNOWN STEP	2025-06-30T09:18:37.6946123Z Temporarily overriding HOME='/home/runner/work/_temp/e96bbdf0-8e87-4cee-9129-9aa0b16a1ead' before making global git config changes
+build	UNKNOWN STEP	2025-06-30T09:18:37.6947874Z Adding repository directory to the temporary git global config as a safe directory
+build	UNKNOWN STEP	2025-06-30T09:18:37.6953158Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-30T09:18:37.6989277Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	UNKNOWN STEP	2025-06-30T09:18:37.7022274Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	UNKNOWN STEP	2025-06-30T09:18:37.7248418Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	UNKNOWN STEP	2025-06-30T09:18:37.7270437Z http.https://github.com/.extraheader
+build	UNKNOWN STEP	2025-06-30T09:18:37.7283696Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+build	UNKNOWN STEP	2025-06-30T09:18:37.7315893Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	UNKNOWN STEP	2025-06-30T09:18:37.7641442Z Cleaning up orphan processes

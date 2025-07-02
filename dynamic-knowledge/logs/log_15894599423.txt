@@ -1,0 +1,132 @@
+build	UNKNOWN STEP	﻿2025-06-26T06:26:57.0984855Z Current runner version: '2.325.0'
+build	UNKNOWN STEP	2025-06-26T06:26:57.1008551Z ##[group]Runner Image Provisioner
+build	UNKNOWN STEP	2025-06-26T06:26:57.1009472Z Hosted Compute Agent
+build	UNKNOWN STEP	2025-06-26T06:26:57.1010014Z Version: 20250620.352
+build	UNKNOWN STEP	2025-06-26T06:26:57.1010564Z Commit: f262f3aba23b10ea191b2a62bdee1ca4c3d344da
+build	UNKNOWN STEP	2025-06-26T06:26:57.1011301Z Build Date: 2025-06-20T19:27:17Z
+build	UNKNOWN STEP	2025-06-26T06:26:57.1011844Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.1012387Z ##[group]Operating System
+build	UNKNOWN STEP	2025-06-26T06:26:57.1012974Z Ubuntu
+build	UNKNOWN STEP	2025-06-26T06:26:57.1013468Z 24.04.2
+build	UNKNOWN STEP	2025-06-26T06:26:57.1013883Z LTS
+build	UNKNOWN STEP	2025-06-26T06:26:57.1014381Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.1014877Z ##[group]Runner Image
+build	UNKNOWN STEP	2025-06-26T06:26:57.1015393Z Image: ubuntu-24.04
+build	UNKNOWN STEP	2025-06-26T06:26:57.1015941Z Version: 20250602.3.0
+build	UNKNOWN STEP	2025-06-26T06:26:57.1017206Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250602.3/images/ubuntu/Ubuntu2404-Readme.md
+build	UNKNOWN STEP	2025-06-26T06:26:57.1018885Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250602.3
+build	UNKNOWN STEP	2025-06-26T06:26:57.1019928Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.1020972Z ##[group]GITHUB_TOKEN Permissions
+build	UNKNOWN STEP	2025-06-26T06:26:57.1023076Z Contents: read
+build	UNKNOWN STEP	2025-06-26T06:26:57.1023592Z Metadata: read
+build	UNKNOWN STEP	2025-06-26T06:26:57.1024064Z Packages: read
+build	UNKNOWN STEP	2025-06-26T06:26:57.1024611Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.1026720Z Secret source: Actions
+build	UNKNOWN STEP	2025-06-26T06:26:57.1027990Z Prepare workflow directory
+build	UNKNOWN STEP	2025-06-26T06:26:57.1358952Z Prepare all required actions
+build	UNKNOWN STEP	2025-06-26T06:26:57.1396693Z Getting action download info
+build	UNKNOWN STEP	2025-06-26T06:26:57.4514301Z ##[group]Download immutable action package 'actions/checkout@v4'
+build	UNKNOWN STEP	2025-06-26T06:26:57.4515414Z Version: 4.2.2
+build	UNKNOWN STEP	2025-06-26T06:26:57.4516412Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+build	UNKNOWN STEP	2025-06-26T06:26:57.4517750Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+build	UNKNOWN STEP	2025-06-26T06:26:57.4518554Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.5426142Z ##[group]Download immutable action package 'actions/setup-node@v4'
+build	UNKNOWN STEP	2025-06-26T06:26:57.5427239Z Version: 4.4.0
+build	UNKNOWN STEP	2025-06-26T06:26:57.5428047Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+build	UNKNOWN STEP	2025-06-26T06:26:57.5428991Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+build	UNKNOWN STEP	2025-06-26T06:26:57.5429761Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.7581723Z Complete job name: build
+build	UNKNOWN STEP	2025-06-26T06:26:57.8311510Z ##[group]Run actions/checkout@v4
+build	UNKNOWN STEP	2025-06-26T06:26:57.8312298Z with:
+build	UNKNOWN STEP	2025-06-26T06:26:57.8312738Z   repository: yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:57.8313752Z   token: ***
+build	UNKNOWN STEP	2025-06-26T06:26:57.8314343Z   ssh-strict: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8314905Z   ssh-user: git
+build	UNKNOWN STEP	2025-06-26T06:26:57.8315557Z   persist-credentials: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8316293Z   clean: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8317212Z   sparse-checkout-cone-mode: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8318066Z   fetch-depth: 1
+build	UNKNOWN STEP	2025-06-26T06:26:57.8318717Z   fetch-tags: false
+build	UNKNOWN STEP	2025-06-26T06:26:57.8319351Z   show-progress: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8319862Z   lfs: false
+build	UNKNOWN STEP	2025-06-26T06:26:57.8320217Z   submodules: false
+build	UNKNOWN STEP	2025-06-26T06:26:57.8320614Z   set-safe-directory: true
+build	UNKNOWN STEP	2025-06-26T06:26:57.8321455Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.9370503Z Syncing repository: yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:57.9372230Z ##[group]Getting Git version info
+build	UNKNOWN STEP	2025-06-26T06:26:57.9373182Z Working directory is '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	UNKNOWN STEP	2025-06-26T06:26:57.9374274Z [command]/usr/bin/git version
+build	UNKNOWN STEP	2025-06-26T06:26:57.9424391Z git version 2.49.0
+build	UNKNOWN STEP	2025-06-26T06:26:57.9450268Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.9464507Z Temporarily overriding HOME='/home/runner/work/_temp/d9a32c55-79d3-46ac-a4e9-a41fbaee76a0' before making global git config changes
+build	UNKNOWN STEP	2025-06-26T06:26:57.9466676Z Adding repository directory to the temporary git global config as a safe directory
+build	UNKNOWN STEP	2025-06-26T06:26:57.9478270Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:57.9511045Z Deleting the contents of '/home/runner/work/github-model-test-basic/github-model-test-basic'
+build	UNKNOWN STEP	2025-06-26T06:26:57.9514255Z ##[group]Initializing the repository
+build	UNKNOWN STEP	2025-06-26T06:26:57.9518325Z [command]/usr/bin/git init /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:57.9596455Z hint: Using 'master' as the name for the initial branch. This default branch name
+build	UNKNOWN STEP	2025-06-26T06:26:57.9597804Z hint: is subject to change. To configure the initial branch name to use in all
+build	UNKNOWN STEP	2025-06-26T06:26:57.9598678Z hint: of your new repositories, which will suppress this warning, call:
+build	UNKNOWN STEP	2025-06-26T06:26:57.9599321Z hint:
+build	UNKNOWN STEP	2025-06-26T06:26:57.9599772Z hint: 	git config --global init.defaultBranch <name>
+build	UNKNOWN STEP	2025-06-26T06:26:57.9600319Z hint:
+build	UNKNOWN STEP	2025-06-26T06:26:57.9600955Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+build	UNKNOWN STEP	2025-06-26T06:26:57.9602299Z hint: 'development'. The just-created branch can be renamed via this command:
+build	UNKNOWN STEP	2025-06-26T06:26:57.9603118Z hint:
+build	UNKNOWN STEP	2025-06-26T06:26:57.9603485Z hint: 	git branch -m <name>
+build	UNKNOWN STEP	2025-06-26T06:26:57.9604363Z Initialized empty Git repository in /home/runner/work/github-model-test-basic/github-model-test-basic/.git/
+build	UNKNOWN STEP	2025-06-26T06:26:57.9612625Z [command]/usr/bin/git remote add origin https://github.com/yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:57.9646464Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.9647405Z ##[group]Disabling automatic garbage collection
+build	UNKNOWN STEP	2025-06-26T06:26:57.9650705Z [command]/usr/bin/git config --local gc.auto 0
+build	UNKNOWN STEP	2025-06-26T06:26:57.9679565Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:57.9680753Z ##[group]Setting up auth
+build	UNKNOWN STEP	2025-06-26T06:26:57.9686609Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	UNKNOWN STEP	2025-06-26T06:26:57.9717000Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	UNKNOWN STEP	2025-06-26T06:26:58.0004693Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	UNKNOWN STEP	2025-06-26T06:26:58.0034331Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	UNKNOWN STEP	2025-06-26T06:26:58.0249950Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+build	UNKNOWN STEP	2025-06-26T06:26:58.0282442Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:58.0283226Z ##[group]Fetching the repository
+build	UNKNOWN STEP	2025-06-26T06:26:58.0300735Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +446a9252567a4057713963b33bf0ec40c842fd39:refs/remotes/origin/master
+build	UNKNOWN STEP	2025-06-26T06:26:58.4689782Z From https://github.com/yashmahi88/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:26:58.4690734Z  * [new ref]         446a9252567a4057713963b33bf0ec40c842fd39 -> origin/master
+build	UNKNOWN STEP	2025-06-26T06:26:58.4716601Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:58.4717565Z ##[group]Determining the checkout info
+build	UNKNOWN STEP	2025-06-26T06:26:58.4719879Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:58.4726199Z [command]/usr/bin/git sparse-checkout disable
+build	UNKNOWN STEP	2025-06-26T06:26:58.4765834Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+build	UNKNOWN STEP	2025-06-26T06:26:58.4792721Z ##[group]Checking out the ref
+build	UNKNOWN STEP	2025-06-26T06:26:58.4797110Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+build	UNKNOWN STEP	2025-06-26T06:26:58.4837119Z Reset branch 'master'
+build	UNKNOWN STEP	2025-06-26T06:26:58.4840007Z branch 'master' set up to track 'origin/master'.
+build	UNKNOWN STEP	2025-06-26T06:26:58.4845593Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:58.4878721Z [command]/usr/bin/git log -1 --format=%H
+build	UNKNOWN STEP	2025-06-26T06:26:58.4899595Z 446a9252567a4057713963b33bf0ec40c842fd39
+build	UNKNOWN STEP	2025-06-26T06:26:58.5131415Z ##[group]Run actions/setup-node@v4
+build	UNKNOWN STEP	2025-06-26T06:26:58.5131923Z with:
+build	UNKNOWN STEP	2025-06-26T06:26:58.5132261Z   node-version: 18
+build	UNKNOWN STEP	2025-06-26T06:26:58.5132633Z   always-auth: false
+build	UNKNOWN STEP	2025-06-26T06:26:58.5133008Z   check-latest: false
+build	UNKNOWN STEP	2025-06-26T06:26:58.5133534Z   token: ***
+build	UNKNOWN STEP	2025-06-26T06:26:58.5133881Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:26:58.7389695Z Found in cache @ /opt/hostedtoolcache/node/18.20.8/x64
+build	UNKNOWN STEP	2025-06-26T06:26:58.7396125Z ##[group]Environment details
+build	UNKNOWN STEP	2025-06-26T06:27:01.1821641Z node: v18.20.8
+build	UNKNOWN STEP	2025-06-26T06:27:01.1822304Z npm: 10.8.2
+build	UNKNOWN STEP	2025-06-26T06:27:01.1822668Z yarn: 1.22.22
+build	UNKNOWN STEP	2025-06-26T06:27:01.1823869Z ##[endgroup]
+build	UNKNOWN STEP	2025-06-26T06:27:01.1946175Z Post job cleanup.
+build	UNKNOWN STEP	2025-06-26T06:27:01.3565366Z Post job cleanup.
+build	UNKNOWN STEP	2025-06-26T06:27:01.4489890Z [command]/usr/bin/git version
+build	UNKNOWN STEP	2025-06-26T06:27:01.4519999Z git version 2.49.0
+build	UNKNOWN STEP	2025-06-26T06:27:01.4562468Z Temporarily overriding HOME='/home/runner/work/_temp/401e5525-5f38-4b7d-9fc8-950b9e8f155f' before making global git config changes
+build	UNKNOWN STEP	2025-06-26T06:27:01.4563604Z Adding repository directory to the temporary git global config as a safe directory
+build	UNKNOWN STEP	2025-06-26T06:27:01.4567788Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/github-model-test-basic/github-model-test-basic
+build	UNKNOWN STEP	2025-06-26T06:27:01.4602094Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+build	UNKNOWN STEP	2025-06-26T06:27:01.4633047Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+build	UNKNOWN STEP	2025-06-26T06:27:01.4853362Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+build	UNKNOWN STEP	2025-06-26T06:27:01.4873407Z http.https://github.com/.extraheader
+build	UNKNOWN STEP	2025-06-26T06:27:01.4885548Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+build	UNKNOWN STEP	2025-06-26T06:27:01.4914620Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+build	UNKNOWN STEP	2025-06-26T06:27:01.5227292Z Cleaning up orphan processes
