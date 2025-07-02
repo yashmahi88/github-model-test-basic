@@ -18,11 +18,15 @@ jobs:
 
       - name: Fetch GitHub Actions Logs & History
         run: |
-          mkdir -p dynamic-knowledge
-          gh run list --limit 20 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
-          LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
-          gh run view "$LATEST_RUN_ID" --log > dynamic-knowledge/latest_logs.txt
+          mkdir -p dynamic-knowledge/logs
 
+          # Get run info for main-ci.yml only (change if your workflow name is different)
+          gh run list --workflow="main-ci.yml" --limit 10 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json          
+          # Extract finished run IDs (not in_progress)
+          jq -r '.[] | select(.status == "completed") | .databaseId' dynamic-knowledge/run_history.json | while read -r RUN_ID; do
+          echo "Fetching logs for run $RUN_ID..."
+          gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
+          done
 
       - name: Commit Updated Dynamic Knowledge
         run: |
@@ -32,6 +36,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "🔁 Update dynamic knowledge from recent runs"
+            git commit -m "Update dynamic knowledge from recent runs"
             git push
           fi
