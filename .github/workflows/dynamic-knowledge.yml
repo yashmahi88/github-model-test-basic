@@ -20,7 +20,9 @@ jobs:
         run: |
           mkdir -p dynamic-knowledge
           gh run list --limit 20 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
-          gh run view --log > dynamic-knowledge/latest_logs.txt
+          LATEST_RUN_ID=$(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+          gh run view "$LATEST_RUN_ID" --log > dynamic-knowledge/latest_logs.txt
+
 
       - name: Commit Updated Dynamic Knowledge
         run: |
