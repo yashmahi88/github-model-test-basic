@@ -6,11 +6,11 @@ on:
       knowledge_path:
         description: 'Path to .txt knowledge base'
         required: true
-        default: '/dynamic-knowledge/dynamic_combined_logs.txt'
+        default: 'dynamic-knowledge/dynamic_combined_logs.txt'
       workflow_path:
         description: 'Path to GitHub workflow file'
         required: true
-        default: '/.github/workflows/main-ci.yml'
+        default: '.github/workflows/main-ci.yml'
       prompt:
         description: 'RAG prompt'
         required: true
