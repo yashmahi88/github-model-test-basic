@@ -1,0 +1,158 @@
+name: GitHub Model Precheck - Unlimited Files (Local RAG)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      models: read
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies and Ollama
+      run: |
+        sudo apt update
+        curl -fsSL https://ollama.com/install.sh | sh
+        pip install langchain langchain-community sentence-transformers faiss-cpu jq
+
+    - name: Pull LLaMA 2 model
+      run: ollama pull llama2
+
+    - name: Discover and Batch Knowledge Files
+      id: discover-files
+      run: |
+        mkdir -p batches processed summaries temp
+
+        find dynamic-knowledge/ -type f \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list
+        TOTAL_FILES=$(wc -l < all_knowledge_files.list)
+
+        if [[ $TOTAL_FILES -eq 0 ]]; then
+          echo "❌ No knowledge base files found"
+          exit 1
+        fi
+
+        MAX_BATCH_SIZE=50
+        MAX_CHARS_PER_BATCH=50000
+
+        batch_num=0
+        current_batch_size=0
+        current_batch_chars=0
+
+        while IFS= read -r file; do
+          file_size=$(wc -c < "$file" 2>/dev/null || echo 0)
+          if [[ $current_batch_size -ge $MAX_BATCH_SIZE ]] || [[ $((current_batch_chars + file_size)) -gt $MAX_CHARS_PER_BATCH ]]; then
+            batch_num=$((batch_num + 1))
+            current_batch_size=0
+            current_batch_chars=0
+          fi
+          echo "$file" >> "batches/batch_${batch_num}.list"
+          current_batch_size=$((current_batch_size + 1))
+          current_batch_chars=$((current_batch_chars + file_size))
+        done < all_knowledge_files.list
+
+        echo "total_files=$TOTAL_FILES" >> "$GITHUB_OUTPUT"
+        echo "total_batches=$((batch_num + 1))" >> "$GITHUB_OUTPUT"
+
+    - name: Process All Batches
+      run: |
+        for batch_file in batches/batch_*.list; do
+          batch_name=$(basename "$batch_file" .list)
+          echo "Processing $batch_name..."
+
+          batch_content=""
+          while IFS= read -r file; do
+            if [[ -f "$file" ]]; then
+              batch_content+="=== FILE: $file ===\n"
+              batch_content+="$(cat "$file")\n\n"
+            fi
+          done < "$batch_file"
+
+          echo -e "$batch_content" > "processed/${batch_name}_content.txt"
+        done
+
+    - name: Extract Rules from Each Batch using Local LLaMA2 + RAG
+      run: |
+        for batch_file in processed/batch_*_content.txt; do
+          batch_name=$(basename "$batch_file" _content.txt)
+          echo "Extracting rules from $batch_name..."
+
+          python3 rag_static_and_dynamic.py \
+            --workflow ".github/workflows/main-ci.yml" \
+            --knowledge_folder "dynamic-knowledge/" \
+            --query_type "rule-extraction" \
+            --batch_file "$batch_file" \
+            --output_file "summaries/${batch_name}_rules.txt"
+        done
+
+        cat summaries/batch_*_rules.txt > all_extracted_rules.txt
+
+    - name: Final Workflow Analysis using Local Model
+      id: final-analysis
+      run: |
+        python3 rag_static_and_dynamic.py  \
+          --workflow ".github/workflows/main-ci.yml" \
+          --knowledge_folder "dynamic-knowledge/" \
+          --query_type "final-analysis" \
+          --batch_file "all_extracted_rules.txt" \
+          --output_file "final_analysis.txt"
+
+        ANALYSIS_RESULT=$(cat final_analysis.txt)
+        echo "$ANALYSIS_RESULT"
+
+        PREDICTION=$(echo "$ANALYSIS_RESULT" | grep -oiE 'PREDICTION[: ]+[A-Z_]+' | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+).*/\1/' | tr '[:lower:]' '[:upper:]')
+
+        if [[ -z "$PREDICTION" ]]; then
+          if echo "$ANALYSIS_RESULT" | grep -qi "insufficient"; then
+            PREDICTION="INSUFFICIENT_KNOWLEDGE"
+          elif echo "$ANALYSIS_RESULT" | grep -qi "fail"; then
+            PREDICTION="FAIL"
+          elif echo "$ANALYSIS_RESULT" | grep -qi "pass"; then
+            PREDICTION="PASS"
+          else
+            PREDICTION="INSUFFICIENT_KNOWLEDGE"
+          fi
+        fi
+
+        echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
+
+        case "$PREDICTION" in
+          "PASS")
+            echo "✅ Workflow analysis PASSED"
+            echo "should_continue=true" >> "$GITHUB_OUTPUT"
+            ;;
+          "FAIL")
+            echo "❌ Workflow analysis FAILED"
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
+            exit 1
+            ;;
+          *)
+            echo "⚠️ Unclear or insufficient result"
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
+            exit 1
+            ;;
+        esac
+
+    - name: Upload RAG Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: rag-analysis-results
+        path: |
+          final_analysis.txt
+          all_extracted_rules.txt
+          summaries/
+          processed/
+          batches/
+          all_knowledge_files.list

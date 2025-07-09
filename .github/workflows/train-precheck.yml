@@ -71,7 +71,7 @@ jobs:
       - name: Process All Batches
         id: process-batches
         run: |
-          echo "⚙️ Processing all file batches..."
+          echo "Processing all file batches..."
           
           TOTAL_BATCHES=$(ls batches/batch_*.list 2>/dev/null | wc -l)
           
