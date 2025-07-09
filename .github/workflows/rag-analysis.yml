@@ -43,7 +43,7 @@ jobs:
 
     - name: Run RAG analysis
       run: |
-        python3 dynamic_analyzer.py \
+        python3 dynamic_analyze.py \
           --workflow "${{ github.event.inputs.workflow_path }}" \
           --knowledge "${{ github.event.inputs.knowledge_path }}" \
           --query "${{ github.event.inputs.prompt }}" \
