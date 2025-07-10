@@ -29,7 +29,7 @@ jobs:
         pip install langchain langchain-community sentence-transformers faiss-cpu jq
 
     - name: Pull LLaMA 2 model
-      run: ollama pull llama2
+      run: ollama pull mistral
 
     - name: Discover and Batch Knowledge Files
       id: discover-files

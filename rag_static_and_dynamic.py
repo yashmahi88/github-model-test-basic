@@ -75,7 +75,7 @@ INSTRUCTIONS:
     """.strip()
 
 # --- Run RAG chain ---
-llm = Ollama(model="llama2")
+llm = Ollama(model="mistral")
 qa = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
 result = qa.run(prompt)
 
