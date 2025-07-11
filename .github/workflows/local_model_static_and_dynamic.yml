@@ -17,6 +17,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Clean stale RAG outputs
+      run: |
+        echo "Cleaning previous RAG files to avoid stale predictions..."
+        rm -f all_extracted_rules.txt
+        rm -f summaries/*.txt || true
+        rm -f processed/*.txt || true
+        rm -f batches/*.list || true    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -28,7 +36,7 @@ jobs:
         curl -fsSL https://ollama.com/install.sh | sh
         pip install langchain langchain-community sentence-transformers faiss-cpu jq
 
-    - name: Pull LLaMA 2 model
+    - name: Pull mistral model
       run: ollama pull mistral
 
     - name: Discover and Batch Knowledge Files
