@@ -86,7 +86,7 @@ jobs:
         for batch_file in processed/batch_*_content.txt; do
           batch_name=$(basename "$batch_file" _content.txt)
 
-          python3 scripts/rag_static_and_dynamic.py \
+          python3 rag_static_and_dynamic.py \
             --workflow ".github/workflows/main-ci.yml" \
             --knowledge_folder "knowledge-base dynamic-knowledge" \
             --query_type "rule-extraction" \
@@ -98,7 +98,7 @@ jobs:
 
     - name: Final Workflow Analysis
       run: |
-        python3 scripts/rag_static_and_dynamic.py \
+        python3 rag_static_and_dynamic.py \
           --workflow ".github/workflows/main-ci.yml" \
           --knowledge_folder "knowledge-base dynamic-knowledge" \
           --query_type "final-analysis" \
