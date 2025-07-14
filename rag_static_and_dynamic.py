@@ -1,4 +1,4 @@
-# scripts/rag_predict.py
+# scripts/rag_static_and_dynamic.py
 
 import argparse
 from pathlib import Path
@@ -19,12 +19,10 @@ parser.add_argument("--output_file", default="rag_result.txt")
 args = parser.parse_args()
 
 # --- Load knowledge documents ---
-all_folders = args.knowledge_folder.split()
 docs = []
-for folder in all_folders:
-    folder_path = Path(folder)
-    for file in folder_path.rglob("*.*"):
-        if file.suffix in [".txt", ".md", ".yml", ".json"]:
+for folder in args.knowledge_folder.split():
+    for file in Path(folder).rglob("*.*"):
+        if file.suffix.lower() in [".txt", ".md", ".yml", ".json"]:
             loader = TextLoader(str(file))
             docs.extend(loader.load())
 
@@ -71,7 +69,12 @@ WORKFLOW TO ANALYZE:
 INSTRUCTIONS:
 1. Check workflow against each relevant rule
 2. Count PASS/FAIL conditions
-3. Output: APPLICABLE_RULES, SATISFIED_RULES, VIOLATED_RULES, PREDICTION
+
+❗Respond ONLY in this format:
+APPLICABLE_RULES: [number]
+SATISFIED_RULES: [number and list]
+VIOLATED_RULES: [number and list]
+PREDICTION: PASS / FAIL / INSUFFICIENT_KNOWLEDGE
     """.strip()
 
 # --- Run RAG chain ---
@@ -83,4 +86,4 @@ result = qa.run(prompt)
 with open(args.output_file, "w") as f:
     f.write(result)
 
-print("✅ RAG Output:\n", result)
+print("\u2705 RAG Output:\n", result)
