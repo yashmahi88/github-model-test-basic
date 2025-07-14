@@ -19,11 +19,10 @@ jobs:
 
     - name: Clean stale RAG outputs
       run: |
-        echo "Cleaning previous RAG files..."
+        echo "Cleaning previous outputs..."
         rm -f all_extracted_rules.txt || true
-        rm -f summaries/*.txt || true
-        rm -f processed/*.txt || true
-        rm -f batches/*.list || true
+        rm -rf summaries processed batches temp || true
+        mkdir -p summaries processed batches temp
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -36,14 +35,21 @@ jobs:
         curl -fsSL https://ollama.com/install.sh | sh
         pip install langchain langchain-community sentence-transformers faiss-cpu jq
 
-    - name: Pull Mistral Model
+    - name: Pull mistral model
       run: ollama pull mistral
 
     - name: Discover and Batch Knowledge Files
+      id: discover-files
       run: |
-        mkdir -p batches processed summaries
+        echo "Discovering knowledge files..."
 
         find knowledge-base/ dynamic-knowledge/ -type f \( -name "*.txt" -o -name "*.md" -o -name "*.yml" -o -name "*.json" \) > all_knowledge_files.list
+        TOTAL_FILES=$(wc -l < all_knowledge_files.list)
+
+        if [[ $TOTAL_FILES -eq 0 ]]; then
+          echo "No knowledge base files found"
+          exit 1
+        fi
 
         MAX_BATCH_SIZE=50
         MAX_CHARS_PER_BATCH=50000
@@ -63,6 +69,9 @@ jobs:
           current_batch_size=$((current_batch_size + 1))
           current_batch_chars=$((current_batch_chars + file_size))
         done < all_knowledge_files.list
+
+        echo "total_files=$TOTAL_FILES" >> "$GITHUB_OUTPUT"
+        echo "total_batches=$((batch_num + 1))" >> "$GITHUB_OUTPUT"
 
     - name: Process All Batches
       run: |
@@ -97,6 +106,7 @@ jobs:
         cat summaries/batch_*_rules.txt > all_extracted_rules.txt
 
     - name: Final Workflow Analysis
+      id: final-analysis
       run: |
         python3 rag_static_and_dynamic.py \
           --workflow ".github/workflows/main-ci.yml" \
@@ -105,17 +115,17 @@ jobs:
           --batch_file "all_extracted_rules.txt" \
           --output_file "final_analysis.txt"
 
-        echo "Final RAG Analysis:"
-        cat final_analysis.txt
+        ANALYSIS_RESULT=$(cat final_analysis.txt)
+        echo "$ANALYSIS_RESULT"
 
-        PREDICTION=$(grep -oiE 'PREDICTION[: ]+[A-Z_]+' final_analysis.txt | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+)/\\1/' | tr '[:lower:]' '[:upper:]')
+        PREDICTION=$(grep -oiE 'PREDICTION[: ]+[A-Z_]+' final_analysis.txt | tail -n1 | sed -E 's/.*PREDICTION[: ]+([A-Z_]+)/\1/' | tr '[:lower:]' '[:upper:]')
 
         if [[ -z "$PREDICTION" ]]; then
-          if grep -qi "insufficient" final_analysis.txt; then
+          if echo "$ANALYSIS_RESULT" | grep -qi "insufficient"; then
             PREDICTION="INSUFFICIENT_KNOWLEDGE"
-          elif grep -qi "fail" final_analysis.txt; then
+          elif echo "$ANALYSIS_RESULT" | grep -qi "fail"; then
             PREDICTION="FAIL"
-          elif grep -qi "pass" final_analysis.txt; then
+          elif echo "$ANALYSIS_RESULT" | grep -qi "pass"; then
             PREDICTION="PASS"
           else
             PREDICTION="INSUFFICIENT_KNOWLEDGE"
@@ -126,14 +136,17 @@ jobs:
 
         case "$PREDICTION" in
           "PASS")
-            echo "✅ Workflow PASSED"
+            echo "✅ Workflow analysis PASSED"
+            echo "should_continue=true" >> "$GITHUB_OUTPUT"
             ;;
           "FAIL")
-            echo "❌ Workflow FAILED"
+            echo "❌ Workflow analysis FAILED"
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
             ;;
           *)
             echo "⚠️ Unclear or insufficient knowledge"
+            echo "should_continue=false" >> "$GITHUB_OUTPUT"
             exit 1
             ;;
         esac
