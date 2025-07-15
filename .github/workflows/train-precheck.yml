@@ -220,7 +220,7 @@ jobs:
           echo -e "$all_extracted_rules" > all_extracted_rules.txt
           
           TOTAL_RULES=$(echo -e "$all_extracted_rules" | grep -c "RULE:" || echo 0)
-          echo "📋 Extracted $TOTAL_RULES total rules from $batch_count batches"
+          echo "Extracted $TOTAL_RULES total rules from $batch_count batches"
           echo "total_rules=$TOTAL_RULES" >> "$GITHUB_OUTPUT"
       
       - name: Consolidate and Analyze
@@ -342,6 +342,7 @@ jobs:
           esac
       
       - name: Upload Comprehensive Analysis
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: comprehensive-analysis

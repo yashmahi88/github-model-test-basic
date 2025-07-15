@@ -70,7 +70,7 @@ INSTRUCTIONS:
 1. Check workflow against each relevant rule
 2. Count PASS/FAIL conditions
 
-❗Respond ONLY in this format:
+Respond ONLY in this format:
 APPLICABLE_RULES: [number]
 SATISFIED_RULES: [number and list]
 VIOLATED_RULES: [number and list]
