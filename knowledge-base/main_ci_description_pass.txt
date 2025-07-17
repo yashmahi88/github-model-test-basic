@@ -15,6 +15,6 @@ This workflow is designed to automate the setup and validation of a Node.js envi
 
 The purpose of this workflow is to validate that a basic Node.js project setup can run through CI without issues, even when placeholder scripts are used.
 
-RULE: package.json must exist before using jq to modify it | TYPE: FAIL | SOURCE: setup.txt
+RULE: Always set up Node.js version '18' | TYPE: FAIL | SOURCE: setup.txt
 RULE: Always run `npm init -y` before manipulating package.json | TYPE: FAIL | SOURCE: node_guidelines.txt
  
