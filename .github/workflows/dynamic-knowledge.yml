@@ -1,7 +1,7 @@
 name: Update Dynamic Knowledge Base
 
 on:
-  # Uncomment below for automatic schedule (e.g., every hour)
+  # Uncomment for automatic scheduling
   # push:
   # schedule:
   #   - cron: '0 * * * *'
@@ -17,32 +17,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch GitHub Actions Logs & History
+      - name: Fetch and Combine GitHub Actions Logs
         run: |
-          mkdir -p dynamic-knowledge/logs
+          mkdir -p dynamic-knowledge
 
-          # Fetch run history for a specific workflow
+          echo "Combined GitHub Logs - $(date)" > dynamic-knowledge/dynamic_combined_logs.txt
+
           gh run list --workflow="train-precheck.yml" --limit 10 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
 
-          # Extract completed run IDs
           jq -r '.[] | select(.status == "completed") | .databaseId' dynamic-knowledge/run_history.json | while read -r RUN_ID; do
             echo "Fetching logs for run $RUN_ID..."
-            gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
+            echo -e "\n========== RUN $RUN_ID ==========\n" >> dynamic-knowledge/dynamic_combined_logs.txt
+            gh run view "$RUN_ID" --log >> dynamic-knowledge/dynamic_combined_logs.txt
           done
 
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      - name: Upload Logs to Azure Blob Storage
+      - name: Upload Combined Log File to Azure Blob Storage
         run: |
-          echo "Uploading logs to Azure Storage..."
+          echo "Uploading dynamic_combined_logs.txt to Azure Blob Storage..."
 
-          az storage blob upload-batch \
+          az storage blob upload \
             --account-name ${{ vars.AZURE_STORAGE_NAME }} \
-            --destination fileupload-test-data-index \
-            --source dynamic-knowledge/logs \
+            --container-name fileupload-test-data-index \
+            --name dynamic_combined_logs.txt \
+            --file dynamic-knowledge/dynamic_combined_logs.txt \
             --auth-mode key \
             --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
             --overwrite
