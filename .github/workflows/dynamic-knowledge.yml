@@ -1,9 +1,10 @@
 name: Update Dynamic Knowledge Base
 
 on:
-#   push:
-#   schedule:
-#     - cron: '0 * * * *' # every hour
+  # Uncomment below for automatic schedule (e.g., every hour)
+  # push:
+  # schedule:
+  #   - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -20,30 +21,28 @@ jobs:
         run: |
           mkdir -p dynamic-knowledge/logs
 
-          # Get run info for main-ci.yml only (change if your workflow name is different)
-          gh run list --workflow="train-precheck.yml" --limit 10 --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json          
-          # Extract finished run IDs (not in_progress)
+          # Fetch run history for a specific workflow
+          gh run list --workflow="train-precheck.yml" --limit 10 \
+            --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > dynamic-knowledge/run_history.json
+
+          # Extract completed run IDs
           jq -r '.[] | select(.status == "completed") | .databaseId' dynamic-knowledge/run_history.json | while read -r RUN_ID; do
-          echo "Fetching logs for run $RUN_ID..."
-          gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
+            echo "Fetching logs for run $RUN_ID..."
+            gh run view "$RUN_ID" --log > "dynamic-knowledge/logs/log_${RUN_ID}.txt"
           done
 
-      - name: Commit and Push Dynamic Knowledge
+      - name: Install Azure CLI
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-    
-          # Set remote with PAT
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/${{ github.repository }}
-    
-          git add dynamic-knowledge/*
-    
-          if git diff --staged --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Update dynamic knowledge from recent runs"
-            git push origin HEAD
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-        
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Upload Logs to Azure Blob Storage
+        run: |
+          echo "Uploading logs to Azure Storage..."
+
+          az storage blob upload-batch \
+            --account-name ${{ vars.AZURE_STORAGE_NAME }} \
+            --destination fileupload-test-data-index \
+            --source dynamic-knowledge/logs \
+            --auth-mode key \
+            --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+            --overwrite
