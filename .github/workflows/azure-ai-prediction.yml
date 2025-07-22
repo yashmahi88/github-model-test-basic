@@ -104,6 +104,7 @@ jobs:
                       \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
                     },
                     \"query_type\": \"vector_semantic_hybrid\",
+                    \"embeddingEndpoint\": \"https://yash-md4gchk3-eastus2.openai.azure.com\",
                     \"semantic_configuration\": \"default\",
                     \"top_n_documents\": 10,
                     \"in_scope\": true
