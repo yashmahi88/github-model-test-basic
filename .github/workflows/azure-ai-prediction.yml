@@ -15,7 +15,7 @@ jobs:
       AZURE_OPENAI_DEPLOYMENT: gpt-4o
       AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar
       AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b
-      AZURE_OPENAI_ENDPOINT: https://rag-pipeline-test.cognitiveservices.azure.com
+      AZURE_OPENAI_ENDPOINT: https://yash-md4gchk3-eastus2.cognitiveservices.azure.com
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
 
     steps:
