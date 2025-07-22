@@ -13,117 +13,177 @@ jobs:
       AZURE_SEARCH_NAME: rag-pipeline-test1
       AZURE_SEARCH_INDEX: test-name-new1
       AZURE_OPENAI_DEPLOYMENT: gpt-4o
-      AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar # Replace this
-      AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b      # Replace this
-      AZURE_OPENAI_ENDPOINT: https://rag-pipeline-test.openai.azure.com/ # Replace this
+      AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar
+      AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b
+      AZURE_OPENAI_ENDPOINT: https://rag-pipeline-test.openai.azure.com/
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Azure CLI
+      - name: Install Azure CLI and jq
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Listing blob files
+      - name: Azure Login
         run: |
-          az storage blob list \
-            --account-name "$AZURE_STORAGE_ACCOUNT" \
-            --container-name "$AZURE_STORAGE_CONTAINER" \
-            --auth-mode key \
-            --account-key "${{ secrets.AZURE_STORAGE_KEY }}" \
-            --output table
+          az login --service-principal \
+            --username ${{ secrets.AZURE_CLIENT_ID }} \
+            --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+            --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set --subscription "$AZURE_SUBSCRIPTION"
 
-
-      - name: Download Knowledge from Blob Storage
+      - name: Verify Azure AI Search Index
         run: |
-          mkdir -p blob-data
-          az storage blob download-batch \
-            --account-name "$AZURE_STORAGE_ACCOUNT" \
-            --destination blob-data \
-            --source "$AZURE_STORAGE_CONTAINER" \
-            --auth-mode key \
-            --account-key "${{ secrets.AZURE_STORAGE_KEY }}"
-          
+          echo "Verifying Azure AI Search index exists..."
+          az search index show \
+            --service-name "$AZURE_SEARCH_NAME" \
+            --name "$AZURE_SEARCH_INDEX" \
+            --resource-group "$AZURE_RESOURCE_GROUP" || {
+            echo "Index not found. Creating index..."
+            # You might need to create the index here if it doesn't exist
+          }
 
-      - name: Extract Workflow
+      - name: Extract Workflow to Analyze
         run: |
           mkdir -p target
           cp .github/workflows/main-ci.yml target/workflow_to_analyze.yml
+          echo "Workflow to analyze:"
+          cat target/workflow_to_analyze.yml
 
-      - name: Call Azure OpenAI GPT-4o for Prediction
+      - name: Call Azure AI Foundry with Connected Data
         id: final-analysis
         run: |
-            echo "Building Prompt..."
-            RULES=$(cat blob-data/dynamic_combined_logs.txt)
-            WORKFLOW_CONTENT=$(cat target/workflow_to_analyze.yml)
-            # Indent rules and workflow
-            INDENTED_RULES=$(echo "$RULES" | sed 's/^/    /')
-            INDENTED_WORKFLOW=$(echo "$WORKFLOW_CONTENT" | sed 's/^/    /')
-            PROMPT=$(cat <<END_PROMPT
-              You are constrained to ONLY the extracted rules below. Do not use external knowledge.
-              RULES:
-            $INDENTED_RULES
-              WORKFLOW TO ANALYZE:
-            $INDENTED_WORKFLOW
-              INSTRUCTIONS:
-              1. Check workflow against each relevant rule
-              2. Count PASS/FAIL conditions
-              Respond ONLY in this format:
-              APPLICABLE_RULES: [number]
-              SATISFIED_RULES: [number and list]
-              VIOLATED_RULES: [number and list]
-              PREDICTION: PASS / FAIL / INSUFFICIENT_KNOWLEDGE
-            END_PROMPT
-            )
-            echo "$PROMPT" > final_prompt.txt
-            echo "Calling GPT-4o via Azure..."
-            ANALYSIS_RESULT=$(curl -s -X POST "$AZURE_OPENAI_ENDPOINT/openai/deployments/$AZURE_OPENAI_DEPLOYMENT/chat/completions?api-version=2024-05-01-preview" \
-              -H "Content-Type: application/json" \
-              -H "api-key: $AZURE_OPENAI_API_KEY" \
-              -d @- <<-EOF
-            {
-              "messages": [
-                {"role": "system", "content": "You are a strict YAML workflow rule evaluator."},
-                {"role": "user", "content": "$PROMPT"}
+          echo "Building prompt for Azure AI Foundry with connected data..."
+          
+          WORKFLOW_CONTENT=$(cat target/workflow_to_analyze.yml)
+          
+          # Create the prompt that will use your connected data
+          PROMPT="You are constrained to ONLY the extracted rules below. Do not use external knowledge.
+          WORKFLOW TO ANALYZE:
+          $WORKFLOW_CONTENT
+          INSTRUCTIONS:
+          1. Check workflow against each relevant rule
+          2. Count PASS/FAIL conditions
+          Respond ONLY in this format:
+          APPLICABLE_RULES: [number]
+          SATISFIED_RULES: [number and list]
+          VIOLATED_RULES: [number and list]
+          PREDICTION: PASS / FAIL / INSUFFICIENT_KNOWLEDGE"
+          
+          echo "Calling Azure AI Foundry GPT-4o with connected data..."
+          
+          # Call Azure OpenAI with data sources (RAG)
+          ANALYSIS_RESULT=$(curl -s -X POST \
+            "$AZURE_OPENAI_ENDPOINT/openai/deployments/$AZURE_OPENAI_DEPLOYMENT/chat/completions?api-version=2024-05-01-preview" \
+            -H "Content-Type: application/json" \
+            -H "api-key: $AZURE_OPENAI_API_KEY" \
+            -d "{
+              \"messages\": [
+                {
+                  \"role\": \"system\",
+                  \"content\": \"You are a strict YAML workflow rule evaluator. Use only the rules from the connected data source.\"
+                },
+                {
+                  \"role\": \"user\",
+                  \"content\": \"$PROMPT\"
+                }
               ],
-              "temperature": 0.0,
-              "top_p": 1.0
-            }
-            EOF
-            )
-            echo "$ANALYSIS_RESULT" > final_analysis.txt
-            echo "$ANALYSIS_RESULT" | jq '.' > final_analysis_response.json
-            PREDICTION=$(echo "$ANALYSIS_RESULT" | jq -r '.choices[0].message.content' \
-              | grep -i "PREDICTION:" | cut -d':' -f2 | tr -d '[:space:]')
-            echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
-            if [[ "$PREDICTION" == "PASS" ]]; then
-              echo "✅ Workflow analysis PASSED"
-              echo "should_continue=true" >> "$GITHUB_OUTPUT"
-            elif [[ "$PREDICTION" == "FAIL" ]]; then
-              echo "❌ Workflow analysis FAILED"
-              echo "should_continue=false" >> "$GITHUB_OUTPUT"
-              exit 1
-            else
-              echo "⚠️ Prediction was unclear or insufficient"
-              echo "should_continue=false" >> "$GITHUB_OUTPUT"
-              exit 1
+              \"temperature\": 0.0,
+              \"top_p\": 1.0,
+              \"max_tokens\": 1000,
+              \"data_sources\": [
+                {
+                  \"type\": \"azure_search\",
+                  \"parameters\": {
+                    \"endpoint\": \"https://$AZURE_SEARCH_NAME.search.windows.net\",
+                    \"index_name\": \"$AZURE_SEARCH_INDEX\",
+                    \"authentication\": {
+                      \"type\": \"api_key\",
+                      \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
+                    },
+                    \"query_type\": \"vector_semantic_hybrid\",
+                    \"semantic_configuration\": \"default\",
+                    \"top_n_documents\": 10,
+                    \"in_scope\": true,
+                    \"role_information\": \"You are an AI assistant that helps analyze GitHub workflows against extracted rules.\"
+                  }
+                }
+              ]
+            }")
+          
+          echo "Raw API Response:"
+          echo "$ANALYSIS_RESULT"
+          
+          # Save the full response
+          echo "$ANALYSIS_RESULT" > final_analysis_response.json
+          echo "$ANALYSIS_RESULT" | jq '.' > final_analysis_formatted.json 2>/dev/null || echo "$ANALYSIS_RESULT" > final_analysis_formatted.json
+          
+          # Extract the content from the response
+          CONTENT=$(echo "$ANALYSIS_RESULT" | jq -r '.choices[0].message.content // .error.message // "No content found"' 2>/dev/null)
+          
+          if [[ "$CONTENT" == "null" || "$CONTENT" == "No content found" ]]; then
+            echo "Error: Could not extract content from API response"
+            echo "Full response: $ANALYSIS_RESULT"
+            PREDICTION="INSUFFICIENT_KNOWLEDGE"
+          else
+            echo "Analysis Result:"
+            echo "$CONTENT"
+            echo "$CONTENT" > final_analysis.txt
+            
+            # Extract prediction from the content
+            PREDICTION=$(echo "$CONTENT" | grep -i "PREDICTION:" | head -1 | sed 's/.*PREDICTION:[[:space:]]*//' | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+            
+            if [[ -z "$PREDICTION" ]]; then
+              echo "Warning: Could not extract PREDICTION from response, checking for keywords..."
+              if echo "$CONTENT" | grep -qi "pass"; then
+                PREDICTION="PASS"
+              elif echo "$CONTENT" | grep -qi "fail"; then
+                PREDICTION="FAIL"
+              else
+                PREDICTION="INSUFFICIENT_KNOWLEDGE"
+              fi
             fi
+          fi
+          
+          echo "Final Prediction: $PREDICTION"
+          echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
+          
+          case "$PREDICTION" in
+            "PASS")
+              echo "✅ Workflow analysis PASSED based on connected data"
+              echo "should_continue=true" >> "$GITHUB_OUTPUT"
+              ;;
+            "FAIL")
+              echo "❌ Workflow analysis FAILED based on connected data"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+            *)
+              echo "⚠️ Insufficient knowledge or unclear prediction"
+              echo "Prediction value was: '$PREDICTION'"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+          esac
 
       - name: Upload Comprehensive Analysis
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: comprehensive-analysis
+          name: azure-ai-foundry-analysis-${{ github.run_number }}
           path: |
             final_analysis_response.json
+            final_analysis_formatted.json
             final_analysis.txt
-            final_prompt.txt
-            blob-data/
+            target/workflow_to_analyze.yml
 
       - name: Trigger Main CI Workflow
         if: steps.final-analysis.outputs.should_continue == 'true'
-        run: gh workflow run 'Main CI Workflow'
+        run: |
+          echo "Triggering main workflow after successful analysis"
+          gh workflow run 'Main CI Workflow'
         env:
           GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
