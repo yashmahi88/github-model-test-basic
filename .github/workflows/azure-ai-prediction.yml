@@ -26,6 +26,16 @@ jobs:
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+      - name: Listing blob files
+        run: |
+          az storage blob list \
+            --account-name "$AZURE_STORAGE_ACCOUNT" \
+            --container-name "$AZURE_STORAGE_CONTAINER" \
+            --auth-mode key \
+            --account-key "$AZURE_STORAGE_KEY" \
+            --output table
+
+
       - name: Download Knowledge from Blob Storage
         run: |
           mkdir -p blob-data
