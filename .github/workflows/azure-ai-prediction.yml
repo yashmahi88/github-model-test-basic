@@ -41,8 +41,7 @@ jobs:
           az search index show \
             --service-name "$AZURE_SEARCH_NAME" \
             --name "$AZURE_SEARCH_INDEX" \
-            --resource-group "$AZURE_RESOURCE_GROUP" || {
-          }
+            --resource-group "$AZURE_RESOURCE_GROUP"
 
       - name: Extract Workflow to Analyze
         run: |
