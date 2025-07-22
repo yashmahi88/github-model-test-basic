@@ -69,6 +69,8 @@ jobs:
           SATISFIED_RULES: [number and list]
           VIOLATED_RULES: [number and list]
           PREDICTION: PASS / FAIL / INSUFFICIENT_KNOWLEDGE"
+
+          ESCAPED_PROMPT=$(printf '%s' "$PROMPT" | jq -Rs .)
           
           echo "Calling Azure AI Foundry GPT-4o with connected data..."
           
@@ -85,7 +87,7 @@ jobs:
                 },
                 {
                   \"role\": \"user\",
-                  \"content\": \"$PROMPT\"
+                  \"content\": $ESCAPED_PROMPT
                 }
               ],
               \"temperature\": 0.0,
