@@ -22,10 +22,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Azure CLI and jq
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          sudo apt-get update && sudo apt-get install -y jq
+    #   - name: Install Azure CLI and jq
+    #     run: |
+    #       curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    #       sudo apt-get update && sudo apt-get install -y jq
 
     #   - name: Azure Login
     #     run: |
