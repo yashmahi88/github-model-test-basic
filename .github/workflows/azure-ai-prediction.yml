@@ -35,6 +35,7 @@ jobs:
             --source "$AZURE_STORAGE_CONTAINER" \
             --auth-mode key \
             --account-key "${{ secrets.AZURE_STORAGE_KEY }}"
+          cat name-local.txt
 
       - name: Extract Workflow
         run: |
