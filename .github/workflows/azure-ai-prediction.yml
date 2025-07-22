@@ -106,8 +106,7 @@ jobs:
                     \"query_type\": \"vector_semantic_hybrid\",
                     \"semantic_configuration\": \"default\",
                     \"top_n_documents\": 10,
-                    \"in_scope\": true,
-                    \"role_information\": \"You are an AI assistant that helps analyze GitHub workflows against extracted rules.\"
+                    \"in_scope\": true
                   }
                 }
               ]
