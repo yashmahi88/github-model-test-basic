@@ -27,13 +27,13 @@ jobs:
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Azure Login
-        run: |
-          az login --service-principal \
-            --username ${{ secrets.AZURE_CLIENT_ID }} \
-            --password ${{ secrets.AZURE_CLIENT_SECRET }} \
-            --tenant ${{ secrets.AZURE_TENANT_ID }}
-          az account set --subscription "$AZURE_SUBSCRIPTION"
+    #   - name: Azure Login
+    #     run: |
+    #       az login --service-principal \
+    #         --username ${{ secrets.AZURE_CLIENT_ID }} \
+    #         --password ${{ secrets.AZURE_CLIENT_SECRET }} \
+    #         --tenant ${{ secrets.AZURE_TENANT_ID }}
+    #       az account set --subscription "$AZURE_SUBSCRIPTION"
 
       - name: Verify Azure AI Search Index
         run: |
@@ -42,8 +42,6 @@ jobs:
             --service-name "$AZURE_SEARCH_NAME" \
             --name "$AZURE_SEARCH_INDEX" \
             --resource-group "$AZURE_RESOURCE_GROUP" || {
-            echo "Index not found. Creating index..."
-            # You might need to create the index here if it doesn't exist
           }
 
       - name: Extract Workflow to Analyze
