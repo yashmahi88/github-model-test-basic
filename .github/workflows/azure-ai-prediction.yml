@@ -95,7 +95,7 @@ jobs:
               \"max_tokens\": 1000,
               \"data_sources\": [
                 {
-                  \"type\": \"azure_search\",
+                  \"type\": "AzureCognitiveSearch",
                   \"parameters\": {
                     \"endpoint\": \"https://$AZURE_SEARCH_NAME.search.windows.net\",
                     \"index_name\": \"$AZURE_SEARCH_INDEX\",
