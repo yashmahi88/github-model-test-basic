@@ -15,7 +15,7 @@ jobs:
       AZURE_OPENAI_DEPLOYMENT: gpt-4o
       AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar
       AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b
-      AZURE_OPENAI_ENDPOINT: https://rag-pipeline-test.openai.azure.com/
+      AZURE_OPENAI_ENDPOINT: https://rag-pipeline-test.cognitiveservices.azure.com
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
 
     steps:
@@ -74,7 +74,7 @@ jobs:
           
           # Call Azure OpenAI with data sources (RAG)
           ANALYSIS_RESULT=$(curl -s -X POST \
-            "$AZURE_OPENAI_ENDPOINT/openai/deployments/$AZURE_OPENAI_DEPLOYMENT/chat/completions?api-version=2024-05-01-preview" \
+            "$AZURE_OPENAI_ENDPOINT/openai/deployments/$AZURE_OPENAI_DEPLOYMENT/chat/completions?api-version=2025-01-01-preview" \
             -H "Content-Type: application/json" \
             -H "api-key: $AZURE_OPENAI_API_KEY" \
             -d "{
