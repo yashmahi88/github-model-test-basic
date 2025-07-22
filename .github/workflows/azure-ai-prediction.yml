@@ -35,13 +35,13 @@ jobs:
     #         --tenant ${{ secrets.AZURE_TENANT_ID }}
     #       az account set --subscription "$AZURE_SUBSCRIPTION"
 
-      - name: Verify Azure AI Search Index
-        run: |
-          echo "Verifying Azure AI Search index exists..."
-          az search index show \
-            --service-name "$AZURE_SEARCH_NAME" \
-            --name "$AZURE_SEARCH_INDEX" \
-            --resource-group "$AZURE_RESOURCE_GROUP"
+    #   - name: Verify Azure AI Search Index
+    #     run: |
+    #       echo "Verifying Azure AI Search index exists..."
+    #       az search index show \
+    #         --service-name "$AZURE_SEARCH_NAME" \
+    #         --name "$AZURE_SEARCH_INDEX" \
+    #         --resource-group "$AZURE_RESOURCE_GROUP"
 
       - name: Extract Workflow to Analyze
         run: |
