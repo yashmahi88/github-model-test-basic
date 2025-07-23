@@ -11,7 +11,7 @@ jobs:
       AZURE_STORAGE_ACCOUNT: sa1testeicyashmahin9324
       AZURE_STORAGE_CONTAINER: fileupload-test-data-index
       AZURE_SEARCH_NAME: rag-pipeline-test1
-      AZURE_SEARCH_INDEX: test-name-new1
+      AZURE_SEARCH_INDEX: blob-update
       AZURE_OPENAI_DEPLOYMENT: gpt-4o
       AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar
       AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b
