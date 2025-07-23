@@ -99,7 +99,7 @@ jobs:
                   \"parameters\": {
                     \"endpoint\": \"https://$AZURE_SEARCH_NAME.search.windows.net\",
                     \"index_name\": \"$AZURE_SEARCH_INDEX\",
-                    \"embeddingEndpoint\": \"https://yash-md4gchk3-eastus2.openai.azure.com\",
+                    # \"embeddingEndpoint\": \"https://yash-md4gchk3-eastus2.openai.azure.com\",
                     \"authentication\": {
                       \"type\": \"api_key\",
                       \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
