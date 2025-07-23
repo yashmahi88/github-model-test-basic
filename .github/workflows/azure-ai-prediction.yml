@@ -103,7 +103,7 @@ jobs:
                       \"type\": \"api_key\",
                       \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
                     },
-                    \"query_type\": \"vector_semantic_hybrid\",
+                    \"query_type\": \"vector_semantic\",
                     \"semantic_configuration\": \"default\",
                     \"top_n_documents\": 10,
                     \"in_scope\": true
