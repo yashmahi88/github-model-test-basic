@@ -83,7 +83,7 @@ jobs:
               \"messages\": [
                 {
                   \"role\": \"system\",
-                  \"content\": \"You are a strict YAML workflow rule evaluator. Use only the rules from the connected data source.\"
+                  \"content\": \"You are a YAML workflow rule evaluator. Use only the rules from the connected data source.\"
                 },
                 {
                   \"role\": \"user\",
