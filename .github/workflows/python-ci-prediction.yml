@@ -1,0 +1,208 @@
+name: Language based Azure AI Foundry Prediction
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_type:
+        description: 'Select workflow to analyze'
+        required: true
+        default: 'main-ci.yml'
+        type: choice
+        options:
+          - main-ci.yml
+          - python-ci.yml
+
+jobs:
+  predict:
+    runs-on: self-hosted
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      AZURE_OPENAI_DEPLOYMENT: gpt-4o
+      AZURE_RESOURCE_GROUP: sa1_test_eic_YashMahindrakar
+      AZURE_SUBSCRIPTION: 664b6097-19f2-42a3-be95-a4a6b4069f6b
+      AZURE_OPENAI_ENDPOINT: https://yash-md4gchk3-eastus2.cognitiveservices.azure.com
+      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set Language-Specific Environment Variables
+        id: set-env
+        run: |
+          if [[ "${{ github.event.inputs.workflow_type }}" == "main-ci.yml" ]]; then
+            echo "Setting Node.js environment variables..."
+            echo "AZURE_STORAGE_ACCOUNT=sa1testeicyashmahin9324" >> $GITHUB_ENV
+            echo "AZURE_STORAGE_CONTAINER=fileupload-test-data-index" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_NAME=rag-pipeline-test1" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_INDEX=blob-update" >> $GITHUB_ENV
+            echo "LANGUAGE=nodejs" >> $GITHUB_ENV
+            echo "TARGET_WORKFLOW=main-ci.yml" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.workflow_type }}" == "python-ci.yml" ]]; then
+            echo "Setting Python environment variables..."
+            echo "AZURE_STORAGE_ACCOUNT=sa1testeicyashmahin9324" >> $GITHUB_ENV
+            echo "AZURE_STORAGE_CONTAINER=python-workflow-data-index" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_NAME=rag-pipeline-python" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_INDEX=python-blob-update" >> $GITHUB_ENV
+            echo "LANGUAGE=python" >> $GITHUB_ENV
+            echo "TARGET_WORKFLOW=python-ci.yml" >> $GITHUB_ENV
+          else
+            echo "Error: Invalid workflow type selected"
+            exit 1
+          fi
+          
+          echo "Selected Language: $LANGUAGE"
+          echo "Target Workflow: $TARGET_WORKFLOW"
+          echo "Storage Account: $AZURE_STORAGE_ACCOUNT"
+          echo "Search Index: $AZURE_SEARCH_INDEX"
+
+      - name: Extract Workflow to Analyze
+        run: |
+          mkdir -p target
+          cp .github/workflows/$TARGET_WORKFLOW target/workflow_to_analyze.yml
+          echo "Analyzing $LANGUAGE workflow:"
+          echo "Workflow file: $TARGET_WORKFLOW"
+          cat target/workflow_to_analyze.yml
+
+      - name: Call Azure AI Foundry with Connected Data
+        id: final-analysis
+        run: |
+          echo "Building prompt for Azure AI Foundry with connected data for $LANGUAGE..."
+          
+          WORKFLOW_CONTENT=$(cat target/workflow_to_analyze.yml)
+          
+          # Create language-specific prompt
+          PROMPT="You are constrained to ONLY the extracted rules below for $LANGUAGE workflows. Do not use external knowledge.
+          Do NOT make assumptions. Do NOT infer new rules or add best practices not explicitly defined.
+          Evaluate the GitHub Actions $LANGUAGE workflow **only** against the provided rules.
+          WORKFLOW TO ANALYZE ($LANGUAGE):
+          $WORKFLOW_CONTENT
+          INSTRUCTIONS:
+          1. Check workflow against each relevant $LANGUAGE rule
+          2. Count PASS/FAIL conditions for $LANGUAGE workflows
+          Respond ONLY in this format:
+          APPLICABLE_RULES: [number]
+          SATISFIED_RULES: [number and list]
+          VIOLATED_RULES: [number and list]
+          PREDICTION: PASS / FAIL / INSUFFICIENT_KNOWLEDGE"
+
+          ESCAPED_PROMPT=$(printf '%s' "$PROMPT" | jq -Rs .)
+          
+          echo "Calling Azure AI Foundry GPT-4o with $LANGUAGE connected data..."
+          
+          # Call Azure OpenAI with language-specific data sources (RAG)
+          ANALYSIS_RESULT=$(curl -s -X POST \
+            "$AZURE_OPENAI_ENDPOINT/openai/deployments/$AZURE_OPENAI_DEPLOYMENT/chat/completions?api-version=2025-01-01-preview" \
+            -H "Content-Type: application/json" \
+            -H "api-key: $AZURE_OPENAI_API_KEY" \
+            -d "{
+              \"messages\": [
+                {
+                  \"role\": \"system\",
+                  \"content\": \"You are a $LANGUAGE YAML workflow rule evaluator. Use only the rules from the connected data source for $LANGUAGE workflows.\"
+                },
+                {
+                  \"role\": \"user\",
+                  \"content\": $ESCAPED_PROMPT
+                }
+              ],
+              \"temperature\": 0.0,
+              \"top_p\": 1.0,
+              \"max_tokens\": 1000,
+              \"data_sources\": [
+                {
+                  \"type\": \"azure_search\",
+                  \"parameters\": {
+                    \"endpoint\": \"https://$AZURE_SEARCH_NAME.search.windows.net\",
+                    \"index_name\": \"$AZURE_SEARCH_INDEX\",
+                    \"authentication\": {
+                      \"type\": \"api_key\",
+                      \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
+                    },
+                    \"query_type\": \"semantic\",
+                    \"semantic_configuration\": \"default\",
+                    \"top_n_documents\": 10,
+                    \"in_scope\": true
+                  }
+                }
+              ]
+            }")
+          
+          echo "Raw API Response for $LANGUAGE:"
+          echo "$ANALYSIS_RESULT"
+          
+          # Save the full response with language prefix
+          echo "$ANALYSIS_RESULT" > ${LANGUAGE}_analysis_response.json
+          echo "$ANALYSIS_RESULT" | jq '.' > ${LANGUAGE}_analysis_formatted.json 2>/dev/null || echo "$ANALYSIS_RESULT" > ${LANGUAGE}_analysis_formatted.json
+          
+          # Extract the content from the response
+          CONTENT=$(echo "$ANALYSIS_RESULT" | jq -r '.choices[0].message.content // .error.message // "No content found"' 2>/dev/null)
+          
+          if [[ "$CONTENT" == "null" || "$CONTENT" == "No content found" ]]; then
+            echo "Error: Could not extract content from API response"
+            echo "Full response: $ANALYSIS_RESULT"
+            PREDICTION="INSUFFICIENT_KNOWLEDGE"
+          else
+            echo "$LANGUAGE Analysis Result:"
+            echo "$CONTENT"
+            echo "$CONTENT" > ${LANGUAGE}_analysis.txt
+            
+            # Extract prediction from the content
+            PREDICTION=$(echo "$CONTENT" | grep -i "PREDICTION:" | head -1 | sed 's/.*PREDICTION:[[:space:]]*//' | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')
+            
+            if [[ -z "$PREDICTION" ]]; then
+              echo "Warning: Could not extract PREDICTION from response, checking for keywords..."
+              if echo "$CONTENT" | grep -qi "pass"; then
+                PREDICTION="PASS"
+              elif echo "$CONTENT" | grep -qi "fail"; then
+                PREDICTION="FAIL"
+              else
+                PREDICTION="INSUFFICIENT_KNOWLEDGE"
+              fi
+            fi
+          fi
+          
+          echo "Final $LANGUAGE Prediction: $PREDICTION"
+          echo "prediction=$PREDICTION" >> "$GITHUB_OUTPUT"
+          
+          case "$PREDICTION" in
+            "PASS")
+              echo "✅ $LANGUAGE workflow analysis PASSED based on connected data"
+              echo "should_continue=true" >> "$GITHUB_OUTPUT"
+              ;;
+            "FAIL")
+              echo "❌ $LANGUAGE workflow analysis FAILED based on connected data"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+            *)
+              echo "⚠️ Insufficient knowledge or unclear prediction for $LANGUAGE"
+              echo "Prediction value was: '$PREDICTION'"
+              echo "should_continue=false" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+          esac
+
+      - name: Upload Comprehensive Analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-ai-foundry-${{ env.LANGUAGE }}-analysis-${{ github.run_number }}
+          path: |
+            ${{ env.LANGUAGE }}_analysis_response.json
+            ${{ env.LANGUAGE }}_analysis_formatted.json
+            ${{ env.LANGUAGE }}_analysis.txt
+            target/workflow_to_analyze.yml
+
+      - name: Trigger Target Workflow
+        if: steps.final-analysis.outputs.should_continue == 'true'
+        run: |
+          if [[ "$LANGUAGE" == "nodejs" ]]; then
+            echo "Triggering Node.js main workflow after successful analysis"
+            gh workflow run 'Main CI Workflow'
+          elif [[ "$LANGUAGE" == "python" ]]; then
+            echo "Triggering Python CI workflow after successful analysis"
+            gh workflow run 'Python CI Workflow'
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
