@@ -1,4 +1,4 @@
-name: Language based Azure AI Foundry Prediction
+name: Azure AI Foundry Prediction
 
 on:
   workflow_dispatch:
@@ -36,6 +36,7 @@ jobs:
             echo "AZURE_STORAGE_CONTAINER=fileupload-test-data-index" >> $GITHUB_ENV
             echo "AZURE_SEARCH_NAME=rag-pipeline-test1" >> $GITHUB_ENV
             echo "AZURE_SEARCH_INDEX=blob-update" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_API_KEY=${{ secrets.AZURE_SEARCH_API_KEY }}" >> $GITHUB_ENV
             echo "LANGUAGE=nodejs" >> $GITHUB_ENV
             echo "TARGET_WORKFLOW=main-ci.yml" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.workflow_type }}" == "python-ci.yml" ]]; then
@@ -44,6 +45,7 @@ jobs:
             echo "AZURE_STORAGE_CONTAINER=python-workflow-data-index" >> $GITHUB_ENV
             echo "AZURE_SEARCH_NAME=rag-pipeline-python" >> $GITHUB_ENV
             echo "AZURE_SEARCH_INDEX=python-blob-update" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_API_KEY=${{ secrets.AZURE_SEARCH_API_KEY_PYTHON }}" >> $GITHUB_ENV
             echo "LANGUAGE=python" >> $GITHUB_ENV
             echo "TARGET_WORKFLOW=python-ci.yml" >> $GITHUB_ENV
           else
@@ -54,7 +56,9 @@ jobs:
           echo "Selected Language: $LANGUAGE"
           echo "Target Workflow: $TARGET_WORKFLOW"
           echo "Storage Account: $AZURE_STORAGE_ACCOUNT"
+          echo "Search Service: $AZURE_SEARCH_NAME"
           echo "Search Index: $AZURE_SEARCH_INDEX"
+          echo "Using language-specific API key"
 
       - name: Extract Workflow to Analyze
         run: |
@@ -89,6 +93,8 @@ jobs:
           ESCAPED_PROMPT=$(printf '%s' "$PROMPT" | jq -Rs .)
           
           echo "Calling Azure AI Foundry GPT-4o with $LANGUAGE connected data..."
+          echo "Using search service: $AZURE_SEARCH_NAME"
+          echo "Using search index: $AZURE_SEARCH_INDEX"
           
           # Call Azure OpenAI with language-specific data sources (RAG)
           ANALYSIS_RESULT=$(curl -s -X POST \
@@ -117,7 +123,7 @@ jobs:
                     \"index_name\": \"$AZURE_SEARCH_INDEX\",
                     \"authentication\": {
                       \"type\": \"api_key\",
-                      \"key\": \"${{ secrets.AZURE_SEARCH_API_KEY }}\"
+                      \"key\": \"$AZURE_SEARCH_API_KEY\"
                     },
                     \"query_type\": \"semantic\",
                     \"semantic_configuration\": \"default\",
