@@ -59,6 +59,8 @@ jobs:
           
           # Create the prompt that will use your connected data
           PROMPT="You are constrained to ONLY the extracted rules below. Do not use external knowledge.
+          Do NOT make assumptions. Do NOT infer new rules or add best practices not explicitly defined.
+          Evaluate the GitHub Actions workflow **only** against the provided rules.
           WORKFLOW TO ANALYZE:
           $WORKFLOW_CONTENT
           INSTRUCTIONS:
