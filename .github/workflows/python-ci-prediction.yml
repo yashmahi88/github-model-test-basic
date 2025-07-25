@@ -53,6 +53,8 @@ jobs:
             exit 1
           fi
           
+      - name: Display configuration
+        run: |
           echo "Selected Language: $LANGUAGE"
           echo "Target Workflow: $TARGET_WORKFLOW"
           echo "Storage Account: $AZURE_STORAGE_ACCOUNT"
