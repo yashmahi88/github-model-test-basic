@@ -6,7 +6,7 @@ on:
       workflow_type:
         description: 'Select workflow to analyze'
         required: true
-        default: 'main-ci.yml'
+        # default: 'main-ci.yml'
         type: choice
         options:
           - main-ci.yml

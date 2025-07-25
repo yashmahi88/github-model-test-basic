@@ -6,42 +6,181 @@ on:
 jobs:
   collect-logs:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+    # env:
+    #   GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch and Combine GitHub Actions Logs
+      - name: Fetch and Segregate GitHub Actions Logs
         run: |
-          mkdir -p temp_logs
+          mkdir -p temp_logs/nodejs temp_logs/python
 
-          echo "Combined GitHub Logs - $(date)" > temp_logs/dynamic_combined_logs.txt
+          echo "Node.js GitHub Logs - $(date)" > temp_logs/nodejs/nodejs_combined_logs.txt
+          echo "Python GitHub Logs - $(date)" > temp_logs/python/python_combined_logs.txt
 
-          gh run list --workflow="train-precheck.yml" --limit 10 \
+          # Fetch logs from Azure AI Foundry Prediction workflow
+          gh run list --workflow="Azure AI Foundry Prediction" --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
+          # Process each completed run and segregate by language
           jq -r '.[] | select(.status == "completed") | .databaseId' temp_logs/run_history.json | while read -r RUN_ID; do
-            echo -e "\n========== RUN $RUN_ID ==========\n" >> temp_logs/dynamic_combined_logs.txt
-            gh run view "$RUN_ID" --log >> temp_logs/dynamic_combined_logs.txt
+            echo "Processing run $RUN_ID..."
+            
+            # Get the full log for this run
+            gh run view "$RUN_ID" --log > temp_logs/temp_run_log.txt
+            
+            # Check if this run was for Node.js or Python by looking for language indicators in the logs
+            if grep -q "Setting Node.js environment variables\|LANGUAGE=nodejs\|main-ci.yml" temp_logs/temp_run_log.txt; then
+              echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
+              echo "Run $RUN_ID classified as Node.js"
+            elif grep -q "Setting Python environment variables\|LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
+              echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
+              echo "Run $RUN_ID classified as Python"
+            else
+              echo "Run $RUN_ID could not be classified, checking displayTitle..."
+              # Fallback: check the run display title or add to both if unclear
+              RUN_TITLE=$(jq -r --arg run_id "$RUN_ID" '.[] | select(.databaseId == ($run_id | tonumber)) | .displayTitle' temp_logs/run_history.json)
+              echo "Run title: $RUN_TITLE"
+              
+              # If we still can't determine, add to both logs with a note
+              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
+              echo "Note: Could not determine language for this run" >> temp_logs/nodejs/nodejs_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
+              
+              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
+              echo "Note: Could not determine language for this run" >> temp_logs/python/python_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
+            fi
+            
+            # Clean up temp file
+            rm -f temp_logs/temp_run_log.txt
           done
+
+          # Check what we collected
+          echo "Node.js logs size: $(wc -l < temp_logs/nodejs/nodejs_combined_logs.txt) lines"
+          echo "Python logs size: $(wc -l < temp_logs/python/python_combined_logs.txt) lines"
 
       - name: Install Azure CLI
         run: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-      - name: Upload Combined Log File to Azure Blob Storage
+      - name: Upload Node.js Logs to Azure Blob Storage
         run: |
-          echo "Uploading to Azure Storage..."
-          az storage blob upload \
-            --account-name ${{ vars.AZURE_STORAGE_NAME }} \
-            --container-name fileupload-test-data-index \
-            --name dynamic_combined_logs.txt \
-            --file temp_logs/dynamic_combined_logs.txt \
-            --auth-mode key \
-            --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
-            --overwrite
+          if [[ -s temp_logs/nodejs/nodejs_combined_logs.txt ]]; then
+            echo "Uploading Node.js logs to Azure Storage..."
+            az storage blob upload \
+              --account-name sa1testeicyashmahin9324 \
+              --container-name fileupload-test-data-index \
+              --name "nodejs_dynamic_combined_logs_$(date +%Y%m%d_%H%M%S).txt" \
+              --file temp_logs/nodejs/nodejs_combined_logs.txt \
+              --auth-mode key \
+              --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+              --overwrite
+            echo "Node.js logs uploaded successfully"
+          else
+            echo "No Node.js logs to upload"
+          fi
+
+      - name: Upload Python Logs to Azure Blob Storage
+        run: |
+          if [[ -s temp_logs/python/python_combined_logs.txt ]]; then
+            echo "Uploading Python logs to Azure Storage..."
+            az storage blob upload \
+              --account-name sa1testeicyashmahin9324 \
+              --container-name python-workflow-data-index \
+              --name "python_dynamic_combined_logs_$(date +%Y%m%d_%H%M%S).txt" \
+              --file temp_logs/python/python_combined_logs.txt \
+              --auth-mode key \
+              --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+              --overwrite
+            echo "Python logs uploaded successfully"
+          else
+            echo "No Python logs to upload"
+          fi
+
+      - name: Generate Upload Summary
+        run: |
+          echo "========== UPLOAD SUMMARY =========="
+          echo "Timestamp: $(date)"
+          
+          if [[ -s temp_logs/nodejs/nodejs_combined_logs.txt ]]; then
+            NODE_LINES=$(wc -l < temp_logs/nodejs/nodejs_combined_logs.txt)
+            echo "Node.js logs: $NODE_LINES lines uploaded to sa1testeicyashmahin9324/fileupload-test-data-index"
+          else
+            echo "Node.js logs: No logs found"
+          fi
+          
+          if [[ -s temp_logs/python/python_combined_logs.txt ]]; then
+            PYTHON_LINES=$(wc -l < temp_logs/python/python_combined_logs.txt)
+            echo "Python logs: $PYTHON_LINES lines uploaded to sa1testeicyashmahin9324/python-workflow-data-index"
+          else
+            echo "Python logs: No logs found"
+          fi
+
+      - name: Upload Log Analysis Summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-segregation-summary-${{ github.run_number }}
+          path: |
+            temp_logs/run_history.json
+            temp_logs/nodejs/nodejs_combined_logs.txt
+            temp_logs/python/python_combined_logs.txt
 
       - name: Clean Up Temporary Files
         run: rm -rf temp_logs
+
+
+
+
+# name: Update Dynamic Knowledge Base
+
+# on:
+#   workflow_dispatch:
+
+# jobs:
+#   collect-logs:
+#     runs-on: ubuntu-latest
+#     env:
+#       GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Fetch and Combine GitHub Actions Logs
+#         run: |
+#           mkdir -p temp_logs
+
+#           echo "Combined GitHub Logs - $(date)" > temp_logs/dynamic_combined_logs.txt
+
+#           gh run list --workflow="train-precheck.yml" --limit 10 \
+#             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
+
+#           jq -r '.[] | select(.status == "completed") | .databaseId' temp_logs/run_history.json | while read -r RUN_ID; do
+#             echo -e "\n========== RUN $RUN_ID ==========\n" >> temp_logs/dynamic_combined_logs.txt
+#             gh run view "$RUN_ID" --log >> temp_logs/dynamic_combined_logs.txt
+#           done
+
+#       - name: Install Azure CLI
+#         run: |
+#           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+#       - name: Upload Combined Log File to Azure Blob Storage
+#         run: |
+#           echo "Uploading to Azure Storage..."
+#           az storage blob upload \
+#             --account-name ${{ vars.AZURE_STORAGE_NAME }} \
+#             --container-name fileupload-test-data-index \
+#             --name dynamic_combined_logs.txt \
+#             --file temp_logs/dynamic_combined_logs.txt \
+#             --auth-mode key \
+#             --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+#             --overwrite
+
+#       - name: Clean Up Temporary Files
+#         run: rm -rf temp_logs
