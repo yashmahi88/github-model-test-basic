@@ -1,4 +1,4 @@
-name: Azure AI Foundry Prediction
+name: Language based Azure AI Foundry Prediction
 
 on:
   workflow_dispatch:
