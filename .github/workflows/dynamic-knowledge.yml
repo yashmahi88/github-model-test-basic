@@ -6,8 +6,8 @@ on:
 jobs:
   collect-logs:
     runs-on: ubuntu-latest
-    # env:
-    #   GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+    env:
+      GH_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
 
     steps:
       - name: Checkout repository

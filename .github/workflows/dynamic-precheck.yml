@@ -1,7 +1,6 @@
 name: GitHub Model Precheck - Dynamic Knowledge
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
