@@ -42,8 +42,9 @@ jobs:
 
             # Define robust patterns for classification (from previous solution)
             # Make sure these strings actually appear in your workflow's logs for each type.
-            NODE_PATTERN="Setting Node.js environment variables|LANGUAGE=nodejs|main-ci.yml|rag-pipeline-test1|fileupload-test-data-index"
-            PYTHON_PATTERN="Setting Python environment variables|LANGUAGE=python|python-ci.yml|rag-pipeline-python|python-workflow-data-index"
+            NODE_PATTERN="LANGUAGE=nodejs|main-ci.yml|Setting Node.js environment variables"
+            PYTHON_PATTERN="LANGUAGE=python|python-ci.yml|Setting Python environment variables"
+
             
             IS_NODE=false
             IS_PYTHON=false
