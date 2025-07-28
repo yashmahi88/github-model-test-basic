@@ -21,7 +21,7 @@ jobs:
           echo "Python GitHub Logs - $(date)" > temp_logs/python/python_combined_logs.txt
 
           # Fetch logs from azure-ai-prediction.yml workflow
-          gh run list --workflow="azure-ai-prediction.yml" --limit 20 \
+          gh run list --workflow="python-ci-prediction.yml " --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
           # Process each completed run and segregate by language
