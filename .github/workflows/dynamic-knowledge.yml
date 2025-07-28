@@ -23,7 +23,7 @@ jobs:
 
           # IMPORTANT: Use the exact display name of your workflow, not just the file name.
           # Based on previous conversation, the workflow display name is "Azure AI Foundry Prediction"
-          gh run list --workflow="Azure AI Foundry Prediction" --limit 20 \
+          gh run list --workflow="python-ci-prediction.yml" --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
           # Process each completed run and segregate by language
