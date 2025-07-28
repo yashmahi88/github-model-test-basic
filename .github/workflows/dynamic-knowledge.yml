@@ -32,14 +32,15 @@ jobs:
             gh run view "$RUN_ID" --log > temp_logs/temp_run_log.txt
             
             # Check if this run was for Node.js or Python by looking for language indicators in the logs
-            if grep -q "Setting Node.js environment variables\|LANGUAGE=nodejs\|main-ci.yml" temp_logs/temp_run_log.txt; then
-              echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
-              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
-              echo "Run $RUN_ID classified as Node.js"
-            elif grep -q "LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
+            
+            if grep -q "LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
               echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
               echo "Run $RUN_ID classified as Python"
+            elif grep -q "Setting Node.js environment variables\|LANGUAGE=nodejs\|main-ci.yml" temp_logs/temp_run_log.txt; then
+              echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
+              echo "Run $RUN_ID classified as Node.js"
             else
               echo "Run $RUN_ID could not be classified, checking displayTitle..."
               # Fallback: check the run display title or add to both if unclear
