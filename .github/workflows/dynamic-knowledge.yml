@@ -34,11 +34,11 @@ jobs:
             # Get the full log for this run
             gh run view "$RUN_ID" --log > temp_logs/temp_run_log.txt
             
-            --- DEBUGGING AID (UNCOMMENT TO SEE LOG CONTENT) ---
+            ##--- DEBUGGING AID (UNCOMMENT TO SEE LOG CONTENT) ---
             echo "--- START LOG CONTENT for RUN $RUN_ID ---"
             cat temp_logs/temp_run_log.txt
             echo "--- END LOG CONTENT for RUN $RUN_ID ---"
-            ----------------------------------------------------
+            ##----------------------------------------------------
 
             # Define robust patterns for classification (from previous solution)
             # Make sure these strings actually appear in your workflow's logs for each type.
