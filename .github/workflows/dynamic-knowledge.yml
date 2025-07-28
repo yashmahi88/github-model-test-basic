@@ -23,8 +23,7 @@ jobs:
 
           # IMPORTANT: Use the exact display name of your workflow, not just the file name.
           # Based on previous conversation, the workflow display name is "Azure AI Foundry Prediction"
-          # If "python-ci-prediction.yml" is the new display name, use that.
-          gh run list --workflow="python-ci-prediction.yml" --limit 20 \
+          gh run list --workflow="Azure AI Foundry Prediction" --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
           # Process each completed run and segregate by language
@@ -34,17 +33,18 @@ jobs:
             # Get the full log for this run
             gh run view "$RUN_ID" --log > temp_logs/temp_run_log.txt
             
-            ##--- DEBUGGING AID (UNCOMMENT TO SEE LOG CONTENT) ---
+            # --- DEBUGGING AID: KEEP THIS UNCOMMENTED FOR A FEW MORE RUNS TO CONFIRM ---
             echo "--- START LOG CONTENT for RUN $RUN_ID ---"
             cat temp_logs/temp_run_log.txt
             echo "--- END LOG CONTENT for RUN $RUN_ID ---"
-            ##----------------------------------------------------
+            # -------------------------------------------------------------------------
 
-            # Define robust patterns for classification (from previous solution)
-            # Make sure these strings actually appear in your workflow's logs for each type.
-            NODE_PATTERN="LANGUAGE=nodejs|main-ci.yml|Setting Node.js environment variables"
-            PYTHON_PATTERN="LANGUAGE=python|python-ci.yml|Setting Python environment variables"
-
+            # Define highly specific patterns based on the unique strings in your logs
+            # NODE_PATTERN: Focus on elements *only* present in Node.js selection
+            NODE_PATTERN="Setting Node.js environment variables|LANGUAGE: nodejs|Target Workflow: main-ci.yml|Search Service: rag-pipeline-test1|Search Index: blob-update"
+            
+            # PYTHON_PATTERN: Focus on elements *only* present in Python selection
+            PYTHON_PATTERN="Setting Python environment variables|LANGUAGE: python|Target Workflow: python-ci.yml|Search Service: rag-pipeline-python|Search Index: python-blob-update"
             
             IS_NODE=false
             IS_PYTHON=false
@@ -59,7 +59,7 @@ jobs:
               IS_PYTHON=true
             fi
 
-            # Now, based on independent checks, decide where to put the log
+            # Decide where to put the log based on independent checks
             if $IS_NODE && ! $IS_PYTHON; then
               # This run is clearly Node.js
               echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
@@ -70,17 +70,12 @@ jobs:
               echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
               echo "✅ Run $RUN_ID classified as Python"
-            elif $IS_NODE && $IS_PYTHON; then
-              # This run matches BOTH patterns - this is a conflict, handle as unclassified or prioritize
-              # For now, put in unclassified for debugging, but you could prioritize one or append to both.
-              echo -e "\n========== CONFLICT: RUN $RUN_ID (Matched Both Node.js and Python Patterns) ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
-              cat temp_logs/temp_run_log.txt >> temp_logs/unclassified/unclassified_combined_logs.txt
-              echo "⚠️ Run $RUN_ID matched both Node.js and Python patterns. Added to unclassified."
             else
-              # This run matches NEITHER pattern - it's truly unclassified
-              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID (No Language Pattern Match) ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
+              # This covers both "matched both" and "matched neither"
+              RUN_TITLE=$(jq -r --arg run_id "$RUN_ID" '.[] | select(.databaseId == ($run_id | tonumber)) | .displayTitle' temp_logs/run_history.json)
+              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID (Node.js Match: $IS_NODE, Python Match: $IS_PYTHON, Title: '$RUN_TITLE') ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/unclassified/unclassified_combined_logs.txt
-              echo "⚠️ Run $RUN_ID could not be classified. Added to unclassified."
+              echo "⚠️ Run $RUN_ID could not be classified reliably."
             fi
             
             # Clean up temp file
@@ -90,7 +85,7 @@ jobs:
           # Check what we collected
           echo "Node.js logs size: $(wc -l < temp_logs/nodejs/nodejs_combined_logs.txt) lines"
           echo "Python logs size: $(wc -l < temp_logs/python/python_combined_logs.txt) lines"
-          echo "Unclassified logs size: $(wc -l < temp_logs/unclassified/unclassified_combined_logs.txt) lines" # Display unclassified too
+          echo "Unclassified logs size: $(wc -l < temp_logs/unclassified/unclassified_combined_logs.txt) lines"
 
       - name: Install Azure CLI
         run: |
