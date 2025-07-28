@@ -21,8 +21,7 @@ jobs:
           echo "Python GitHub Logs - $(date)" > temp_logs/python/python_combined_logs.txt
           echo "Unclassified GitHub Logs - $(date)" > temp_logs/unclassified/unclassified_combined_logs.txt # Header for unclassified
 
-          # IMPORTANT: Use the exact display name of your workflow, not just the file name.
-          # Based on previous conversation, the workflow display name is "Azure AI Foundry Prediction"
+          # IMPORTANT: Using your specified workflow file name.
           gh run list --workflow="python-ci-prediction.yml" --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
@@ -39,12 +38,12 @@ jobs:
             echo "--- END LOG CONTENT for RUN $RUN_ID ---"
             # -------------------------------------------------------------------------
 
-            # Define highly specific patterns based on the unique strings in your logs
-            # NODE_PATTERN: Focus on elements *only* present in Node.js selection
-            NODE_PATTERN="Setting Node.js environment variables|LANGUAGE: nodejs|Target Workflow: main-ci.yml|Search Service: rag-pipeline-test1|Search Index: blob-update"
+            # Define highly specific patterns based on YOUR ACTUAL LOGS.
+            # These patterns use the exact output from your "Display configuration" step.
+            # They should be highly unique.
+            NODE_PATTERN="Selected Language: nodejs|Search Service: rag-pipeline-test1|Search Index: blob-update"
             
-            # PYTHON_PATTERN: Focus on elements *only* present in Python selection
-            PYTHON_PATTERN="Setting Python environment variables|LANGUAGE: python|Target Workflow: python-ci.yml|Search Service: rag-pipeline-python|Search Index: python-blob-update"
+            PYTHON_PATTERN="Selected Language: python|Search Service: rag-pipeline-python|Search Index: python-blob-update"
             
             IS_NODE=false
             IS_PYTHON=false
@@ -59,21 +58,26 @@ jobs:
               IS_PYTHON=true
             fi
 
-            # Decide where to put the log based on independent checks
-            if $IS_NODE && ! $IS_PYTHON; then
-              # This run is clearly Node.js
-              echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
-              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
-              echo "✅ Run $RUN_ID classified as Node.js"
-            elif $IS_PYTHON && ! $IS_NODE; then
-              # This run is clearly Python
+            # Decision Logic:
+            if $IS_PYTHON && ! $IS_NODE; then
+              # This run is clearly Python (Python patterns matched, Node.js patterns did not)
               echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
               echo "✅ Run $RUN_ID classified as Python"
+            elif $IS_NODE && ! $IS_PYTHON; then
+              # This run is clearly Node.js (Node.js patterns matched, Python patterns did not)
+              echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
+              echo "✅ Run $RUN_ID classified as Node.js"
             else
-              # This covers both "matched both" and "matched neither"
+              # This block handles:
+              # 1. Runs where both patterns matched (conflict)
+              # 2. Runs where neither pattern matched (truly unclassified)
+              # If a run is still coming here, it means either:
+              #   a) The log content is malformed or missing these specific strings.
+              #   b) There's an unexpected overlap (less likely with these specific patterns).
               RUN_TITLE=$(jq -r --arg run_id "$RUN_ID" '.[] | select(.databaseId == ($run_id | tonumber)) | .displayTitle' temp_logs/run_history.json)
-              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID (Node.js Match: $IS_NODE, Python Match: $IS_PYTHON, Title: '$RUN_TITLE') ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
+              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID (Node Match: $IS_NODE, Python Match: $IS_PYTHON, Title: '$RUN_TITLE') ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/unclassified/unclassified_combined_logs.txt
               echo "⚠️ Run $RUN_ID could not be classified reliably."
             fi
