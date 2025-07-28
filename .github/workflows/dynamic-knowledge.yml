@@ -36,7 +36,7 @@ jobs:
               echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
               echo "Run $RUN_ID classified as Node.js"
-            elif grep -q "Setting Python environment variables\|LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
+            elif grep -q "LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
               echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
               echo "Run $RUN_ID classified as Python"
