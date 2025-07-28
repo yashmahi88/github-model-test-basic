@@ -15,12 +15,15 @@ jobs:
 
       - name: Fetch and Segregate GitHub Actions Logs
         run: |
-          mkdir -p temp_logs/nodejs temp_logs/python
+          mkdir -p temp_logs/nodejs temp_logs/python temp_logs/unclassified # Create unclassified directory
 
           echo "Node.js GitHub Logs - $(date)" > temp_logs/nodejs/nodejs_combined_logs.txt
           echo "Python GitHub Logs - $(date)" > temp_logs/python/python_combined_logs.txt
+          echo "Unclassified GitHub Logs - $(date)" > temp_logs/unclassified/unclassified_combined_logs.txt # Header for unclassified
 
-          # Fetch logs from python-ci-prediction.yml  workflow
+          # IMPORTANT: Use the exact display name of your workflow, not just the file name.
+          # Based on previous conversation, the workflow display name is "Azure AI Foundry Prediction"
+          # If "python-ci-prediction.yml" is the new display name, use that.
           gh run list --workflow="python-ci-prediction.yml" --limit 20 \
             --json databaseId,displayTitle,headBranch,conclusion,status,url,startedAt,updatedAt > temp_logs/run_history.json
 
@@ -31,30 +34,52 @@ jobs:
             # Get the full log for this run
             gh run view "$RUN_ID" --log > temp_logs/temp_run_log.txt
             
-            # Check if this run was for Node.js or Python by looking for language indicators in the logs
+            # --- DEBUGGING AID (UNCOMMENT TO SEE LOG CONTENT) ---
+            # echo "--- START LOG CONTENT for RUN $RUN_ID ---"
+            # cat temp_logs/temp_run_log.txt
+            # echo "--- END LOG CONTENT for RUN $RUN_ID ---"
+            # ----------------------------------------------------
+
+            # Define robust patterns for classification (from previous solution)
+            # Make sure these strings actually appear in your workflow's logs for each type.
+            NODE_PATTERN="Setting Node.js environment variables|LANGUAGE=nodejs|main-ci.yml|rag-pipeline-test1|fileupload-test-data-index"
+            PYTHON_PATTERN="Setting Python environment variables|LANGUAGE=python|python-ci.yml|rag-pipeline-python|python-workflow-data-index"
             
-            if grep -q "LANGUAGE=python\|python-ci.yml" temp_logs/temp_run_log.txt; then
-              echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
-              cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
-              echo "Run $RUN_ID classified as Python"
-            elif grep -q "Setting Node.js environment variables\|LANGUAGE=nodejs\|main-ci.yml" temp_logs/temp_run_log.txt; then
+            IS_NODE=false
+            IS_PYTHON=false
+
+            # Check for Node.js indicators
+            if grep -qE "$NODE_PATTERN" temp_logs/temp_run_log.txt; then
+              IS_NODE=true
+            fi
+            
+            # Check for Python indicators
+            if grep -qE "$PYTHON_PATTERN" temp_logs/temp_run_log.txt; then
+              IS_PYTHON=true
+            fi
+
+            # Now, based on independent checks, decide where to put the log
+            if $IS_NODE && ! $IS_PYTHON; then
+              # This run is clearly Node.js
               echo -e "\n========== NODE.JS RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
-              echo "Run $RUN_ID classified as Node.js"
-            else
-              echo "Run $RUN_ID could not be classified, checking displayTitle..."
-              # Fallback: check the run display title or add to both if unclear
-              RUN_TITLE=$(jq -r --arg run_id "$RUN_ID" '.[] | select(.databaseId == ($run_id | tonumber)) | .displayTitle' temp_logs/run_history.json)
-              echo "Run title: $RUN_TITLE"
-              
-              # If we still can't determine, add to both logs with a note
-              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID ==========\n" >> temp_logs/nodejs/nodejs_combined_logs.txt
-              echo "Note: Could not determine language for this run" >> temp_logs/nodejs/nodejs_combined_logs.txt
-              cat temp_logs/temp_run_log.txt >> temp_logs/nodejs/nodejs_combined_logs.txt
-              
-              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
-              echo "Note: Could not determine language for this run" >> temp_logs/python/python_combined_logs.txt
+              echo "✅ Run $RUN_ID classified as Node.js"
+            elif $IS_PYTHON && ! $IS_NODE; then
+              # This run is clearly Python
+              echo -e "\n========== PYTHON RUN $RUN_ID ==========\n" >> temp_logs/python/python_combined_logs.txt
               cat temp_logs/temp_run_log.txt >> temp_logs/python/python_combined_logs.txt
+              echo "✅ Run $RUN_ID classified as Python"
+            elif $IS_NODE && $IS_PYTHON; then
+              # This run matches BOTH patterns - this is a conflict, handle as unclassified or prioritize
+              # For now, put in unclassified for debugging, but you could prioritize one or append to both.
+              echo -e "\n========== CONFLICT: RUN $RUN_ID (Matched Both Node.js and Python Patterns) ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/unclassified/unclassified_combined_logs.txt
+              echo "⚠️ Run $RUN_ID matched both Node.js and Python patterns. Added to unclassified."
+            else
+              # This run matches NEITHER pattern - it's truly unclassified
+              echo -e "\n========== UNCLASSIFIED RUN $RUN_ID (No Language Pattern Match) ==========\n" >> temp_logs/unclassified/unclassified_combined_logs.txt
+              cat temp_logs/temp_run_log.txt >> temp_logs/unclassified/unclassified_combined_logs.txt
+              echo "⚠️ Run $RUN_ID could not be classified. Added to unclassified."
             fi
             
             # Clean up temp file
@@ -64,6 +89,7 @@ jobs:
           # Check what we collected
           echo "Node.js logs size: $(wc -l < temp_logs/nodejs/nodejs_combined_logs.txt) lines"
           echo "Python logs size: $(wc -l < temp_logs/python/python_combined_logs.txt) lines"
+          echo "Unclassified logs size: $(wc -l < temp_logs/unclassified/unclassified_combined_logs.txt) lines" # Display unclassified too
 
       - name: Install Azure CLI
         run: |
