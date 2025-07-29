@@ -107,7 +107,7 @@ jobs:
               \"messages\": [
                 {
                   \"role\": \"system\",
-                  \"content\": \"You are a $LANGUAGE YAML workflow rule evaluator. Use only the rules from the connected data source for $LANGUAGE workflows.\"
+                  \"content\": \"You are a $LANGUAGE YAML workflow rule evaluator. Use only the rules from the connected data source for $LANGUAGE workflows.Output must only contain 4 labeled lines (APPLICABLE_RULES, SATISFIED_RULES, VIOLATED_RULES, PREDICTION) in plain text, no citations or explanations.\"
                 },
                 {
                   \"role\": \"user\",
