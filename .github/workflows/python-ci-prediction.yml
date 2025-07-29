@@ -35,7 +35,7 @@ jobs:
             echo "AZURE_STORAGE_ACCOUNT=sa1testeicyashmahin9324" >> $GITHUB_ENV
             echo "AZURE_STORAGE_CONTAINER=fileupload-test-data-index" >> $GITHUB_ENV
             echo "AZURE_SEARCH_NAME=rag-pipeline-test1" >> $GITHUB_ENV
-            echo "AZURE_SEARCH_INDEX=nodejs-index" >> $GITHUB_ENV
+            echo "AZURE_SEARCH_INDEX=blob-update" >> $GITHUB_ENV
             echo "AZURE_SEARCH_API_KEY=${{ secrets.AZURE_SEARCH_API_KEY }}" >> $GITHUB_ENV
             echo "LANGUAGE=nodejs" >> $GITHUB_ENV
             echo "TARGET_WORKFLOW=main-ci.yml" >> $GITHUB_ENV
